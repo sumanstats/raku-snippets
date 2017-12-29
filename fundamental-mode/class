@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: class
+# key: cls
+# --
+class $1 {
+    has $2 ;
+    has $3 ;
+    method $4($5) {
+        $6 ;
+    }
+}
+$0

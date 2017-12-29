@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: multisub
+# key: multi
+# --
+multi sub $1($2) {
+    $3
+}
+$0

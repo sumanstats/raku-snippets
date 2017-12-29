@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: head2
+# key: h2
+# --
+=head2 $1
+
+$0
