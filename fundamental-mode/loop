@@ -2,7 +2,7 @@
 # name: loop
 # key: loop
 # --
-loop ($1; $2; $3) {
-    $4;
+loop (${1:initializer}; ${2:conditional}; ${3:incrementer}) {
+    ${4:block};
 }
 $0
