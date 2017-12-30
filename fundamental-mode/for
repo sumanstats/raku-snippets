@@ -2,7 +2,7 @@
 # name: for
 # key: for
 # --
-for $1 {
-    $2 ;
+for ${1:iterable} {
+    ${2:block} ;
 }
 $0
