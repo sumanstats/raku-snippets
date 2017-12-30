@@ -2,7 +2,7 @@
 # name: multisub
 # key: multi
 # --
-multi sub $1($2) {
-    $3
+multi sub ${1:name}(${2:parameters}) {
+    ${3:body}
 }
 $0
