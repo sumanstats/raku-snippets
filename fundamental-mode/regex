@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: regex
-# key: reg
+# key: regex
 # --
 regex $1 {
     $2 
