@@ -1,11 +1,11 @@
 {
 
-"Variable": {
+"New variable": {
 	"prefix": "var",
 	"body": [
 		"my $1 = $2;"
 	],
-	"description": "local variable"
+	"description": "variable"
 }
 
 "Say": {
@@ -15,6 +15,7 @@
 	],
 	"description": "Printing without newline"
 }
+
 "Print": {
 	"prefix": "print",
 	"body": [
@@ -47,8 +48,8 @@
 "Conditional1": {
 	"prefix": "if",
 	"body": [
-		"if $1 {"
-			"\t$2;"
+		"if ${1:condition} {"
+			"\t${2:body};"
 			"} $0"
 	],
 	"description": "If conditional"
@@ -57,8 +58,8 @@
 "Conditional2": {
 	"prefix": "elsif",
 	"body": [
-		"elsif $1 {"
-			"\t$2;"
+		"elsif ${1:condition} {"
+			"\t${2:body};"
 			"} $0"
 	],
 	"description": "Else if branch"
@@ -68,7 +69,7 @@
 	"prefix": "else",
 	"body": [
 		"else {"
-			"\t$1;"
+			"\t${1:body};"
 			"};"
 			"$0"
 	],
@@ -78,8 +79,8 @@
 "Function": {
 	"prefix": "sub",
 	"body": [
-		"sub $1($2) {"
-			"\t$3;"
+		"sub ${1:name}(${2:parameters}) {"
+			"\t${3:body};"
 			"\t}"
 			"$0"
 	],
@@ -89,11 +90,11 @@
 "Class": {
 	"prefix": "cls",
 	"body": [
-		"class $1 {"
-			"\thas $2;"
-			"\thas $3;"
-			"\tmethod $4 {"
-				"\t\t$5;"
+		"class ${1:name} {"
+			"\thas ${2:attribute};"
+			"\thas ${3:attribute};"
+			"\tmethod ${4:behavior} {"
+				"\t\t${5:body};"
 				"\t}"
 				"\t$0"
 				"}"
@@ -115,8 +116,8 @@
 "Multi Subroutines": {
 	"prefix": "multi",
 	"body": [
-		"multi sub $1($2) {"
-			"\t$3"
+		"multi sub ${1:name}(${2:parameters}) {"
+			"\t${3:body}"
 			"}"
 			"$0"		
 	],
@@ -185,6 +186,17 @@
 		"$0"		
 	],
 	"description": "regex"
+}
+
+"Main function": {
+	"prefix": "main",
+	"body": [
+		"sub MAIN(${1:parameters}) {"
+			"\t${2:body}"
+			"}"
+			"$0"		
+	],
+	"description": "MAIN function"
 }
 
 }
