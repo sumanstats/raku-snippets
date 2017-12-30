@@ -1,19 +1,5 @@
 {
-/*
-	// Place your snippets for Perl 6 here. Each snippet is defined under a snippet name and has a prefix, body and 
-	// description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
-	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the 
-	// same ids are connected.
-	// Example:
-	"Print to console": {
-		"prefix": "log",
-		"body": [
-			"console.log('$1');",
-			"$2"
-		],
-		"description": "Log output to console"
-	}
-*/
+
 "Variable": {
 	"prefix": "var",
 	"body": [
@@ -56,30 +42,29 @@
 			"$0"
 	],
 	"description": "For loop with pointy block"
+}
 
-"Conditional": {
+"Conditional1": {
 	"prefix": "if",
 	"body": [
 		"if $1 {"
 			"\t$2;"
-			"\t}"
-			"$0"
+			"} $0"
 	],
 	"description": "If conditional"
 }
 
-"Conditional": {
+"Conditional2": {
 	"prefix": "elsif",
 	"body": [
 		"elsif $1 {"
 			"\t$2;"
-			"\t}"
-			"$0"
+			"} $0"
 	],
 	"description": "Else if branch"
 }
 
-"Conditional": {
+"Conditional3": {
 	"prefix": "else",
 	"body": [
 		"else {"
@@ -110,8 +95,8 @@
 			"\tmethod $4 {"
 				"\t\t$5;"
 				"\t}"
+				"\t$0"
 				"}"
-				"$0"
 	],
 	"description": "Class definition"
 }
@@ -127,3 +112,79 @@
 	"description": "method"
 }
 
+"Multi Subroutines": {
+	"prefix": "multi",
+	"body": [
+		"multi sub $1($2) {"
+			"\t$3"
+			"}"
+			"$0"		
+	],
+	"description": "multi subroutines"
+}
+
+"Given": {
+	"prefix": "given",
+	"body": [
+		"given $1 {"
+			"\twhen $2 {$3}"
+			"\twhen $4 {$5}"
+			"\tdefault {$6}"
+			"}"
+			"$0"		
+	],
+	"description": "given statement"
+}
+
+"Grammar": {
+	"prefix": "gm",
+	"body": [
+		"grammar $1 {"
+			"\t$2"
+			"}"
+		    "$0"		
+	],
+	"description": "Creating grammar"
+}
+
+"Token": {
+	"prefix": "token",
+	"body": [
+		"token $1 {$2}"
+		"$0"		
+	],
+	"description": "token"
+}
+
+"Rolegrammar": {
+	"prefix": "role",
+	"body": [
+		"role $1 {"
+			"\t$2"
+			"}"
+			"$0"		
+	],
+	"description": "role grammar"
+}
+
+"Rulegrammar": {
+	"prefix": "rule",
+	"body": [
+		"rule $1 {$2}"
+		"$0"		
+	],
+	"description": "rule"
+}
+
+"Regex": {
+	"prefix": "regex",
+	"body": [
+		"regex $1 {"
+		"\t$2"
+		"}"
+		"$0"		
+	],
+	"description": "regex"
+}
+
+}
