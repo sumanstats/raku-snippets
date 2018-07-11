@@ -223,4 +223,35 @@
 	"description": "MAIN function"
 }
 
+"NativeCall1": {
+	"prefix": "natc",
+	"body": [
+		"use NativeCall;"
+		"$0"
+	],
+	"description": "use NativeCall"
+}
+
+
+"NativeCall2": {
+	"prefix": "native1",
+	"body": [
+		"sub ${1:some_argless_function}() is native(\"${2:shared_library}\") { * };"
+		"$0"
+	],
+	"description": "argless function"
+}
+
+
+"NativeCall3": {
+	"prefix": "native2",
+	"body": [
+		"sub ${1:function_name}(${2:argument_types}) returns ${3:return_type} is native(\"${4:shared_library}\") is symbol('${5:name_of_function_inside_shared_library}') { * };"
+		"$0"
+	],
+	"description": "specify the name of the native routine in your library "
+}
+
+
+
 }
