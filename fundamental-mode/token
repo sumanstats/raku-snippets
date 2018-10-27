@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: token
-# key: tok
-# --
-token $1 {$2}
-$0

@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: MAIN function
-# key: main
-# --
-sub MAIN(${1:parameters}) {
-    ${2:body}
-}
-$0

@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: say
-# key: say
-# --
-say $1 ;
-$0

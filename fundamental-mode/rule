@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: rule
-# key: rule
-# --
-rule $1 {$2}
-$0
