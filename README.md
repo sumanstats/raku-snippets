@@ -10,6 +10,6 @@ Typing `cls` then `TAB` will give you whole class, attributes and methods skelet
 
 ----
 
-In **[Atom](https://atom.io/)**, replace `snippets.json` file inside .atom folder with the provided file.
+In **[Atom](https://atom.io/)**, replace `snippets.cson` file inside .atom folder with the provided file.
 
 
