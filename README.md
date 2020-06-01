@@ -1,5 +1,5 @@
 ## What it contains?
-Contains snippets for Perl 6 that can be loaded in Atom or VS Code.
+Contains snippets for Raku that can be loaded in Atom or VS Code.
 
 ## How to use?
 
