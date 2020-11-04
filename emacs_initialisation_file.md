@@ -13,13 +13,15 @@ For this install `company` mode, ess, solarised theme and lsp-mode.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages '(elpy lsp-mode company solarized-theme ess)))
+ '(package-selected-packages
+   '(yasnippet-snippets elpy lsp-mode company solarized-theme ess)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(setq create-lockfiles nil)
 (setq inhibit-startup-message t)
 (setq inferior-ess-r-program "R")
 (setq ess-tab-complete-in-script 1)
@@ -30,9 +32,12 @@ For this install `company` mode, ess, solarised theme and lsp-mode.
 ;;(elpy-enable)
 (add-hook 'after-init-hook 'global-company-mode)
 (set-face-attribute 'default nil :family "Consolas" :height 140)
-(add-to-list 'default-frame-alist '(height . 35))
-(add-to-list 'default-frame-alist '(width . 110))
+(add-to-list 'default-frame-alist '(height . 30))
+(add-to-list 'default-frame-alist '(width . 115))
 (require 'lsp-mode)
 (lsp-mode 1)
+(elpy-enable)
+(yas-global-mode 1)
+
 
 ```
