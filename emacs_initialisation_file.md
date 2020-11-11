@@ -2,7 +2,7 @@
 
 
 
-For this install `company` mode, ess, solarised theme and lsp-mode.
+For this install `company` mode, `ess`, `solarised theme` and `lsp-mode`. Put this configuration in `init.el` inside `.emacs.d` directory.
 
 ```
 (require 'package)
