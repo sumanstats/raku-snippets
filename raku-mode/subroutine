@@ -3,6 +3,6 @@
 # key: sub
 # --
 sub ${1:name}(${2:parameters}) {
-    return ${3:body};
-}
+    ${3:body};
+    }
 $0

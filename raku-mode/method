@@ -2,7 +2,7 @@
 # name: method
 # key: md
 # --
-method $1($2) {
+method ${1:name}(${2:parameters}) {
     $3;
 }
 $0

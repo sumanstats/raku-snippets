@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: class
+# name: Class definition
 # key: cls
 # --
 class ${1:name} {
@@ -7,6 +7,7 @@ class ${1:name} {
     has ${3:attribute};
     method ${4:behavior}(${5:parameters}) {
         ${6:body};
-    }
-    $0
+    } 
+    $7
 }
+$0

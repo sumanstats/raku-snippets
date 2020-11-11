@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: for
+# name: For iterable with local variable
 # key: for
 # --
 for ${1:iterable} {

@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: multi-subroutine
+# name: multi subroutines
 # key: multi
 # --
 multi sub ${1:name}(${2:parameters}) {

@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: given
+# name: given statement
 # key: given
 # --
 given $1 {

@@ -21,6 +21,7 @@ For this install `company` mode, `ess`, `solarised theme` and `lsp-mode`. Put th
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(package-initialize)
 (add-hook 'emacs-startup-hook 'toggle-frame-maximized)
 (setq default-directory "c:/Users/suman/")
 (setq create-lockfiles nil)
@@ -29,8 +30,7 @@ For this install `company` mode, `ess`, `solarised theme` and `lsp-mode`. Put th
 (setq ess-tab-complete-in-script 1)
 (setq ess-ask-for-ess-directory t)
 (load-theme 'solarized-dark t)
-(global-linum-mode t)       ;;enable line numbers
-;;(package-initialize)
+(global-linum-mode t)     ;;enable line numbers
 ;;(elpy-enable)
 (add-hook 'after-init-hook 'global-company-mode)
 (set-face-attribute 'default nil :font "Consolas-18")
@@ -44,8 +44,5 @@ For this install `company` mode, `ess`, `solarised theme` and `lsp-mode`. Put th
 (require 'smartparens-config)
 (smartparens-global-mode t)
 (require 'yasnippet-snippets)
-
-
-
 
 ```

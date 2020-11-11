@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
-# name: grammar
-# key: gram
+# name: Create grammar
+# key: gm
 # --
 grammar $1 {
     $2

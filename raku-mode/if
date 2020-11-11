@@ -1,8 +1,7 @@
 # -*- mode: snippet -*-
-# name: if
+# name: If conditional
 # key: if
 # --
 if ${1:condition} {
     ${2:block};
-}
-$0
+} $0
