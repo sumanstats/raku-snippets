@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: test plan
+# key: plan
+# --
+plan ${1:number of tests};
+$0

@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: pointy for block
+# key: forp
+# --
+for $1 -> $2 {
+    ${3:block};
+}
+$0

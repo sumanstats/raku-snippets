@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: multiline-comment
+# key: multi-comment
+# --
+
+=begin comment
+${1:write pod comment here}
+=end comment
+
+${0}

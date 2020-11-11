@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: multiline-comment
+# key: multi-comment
+# --
+#`[
+${1:multiline comment}
+]
+${0}

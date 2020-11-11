@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: elsif
+# key: elif
+# --
+elsif ${1:condition} {
+    ${2:block};
+}
+$0

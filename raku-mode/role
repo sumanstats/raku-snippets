@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: role
+# key: rol
+# --
+role $1 {
+    $2
+}
+$0

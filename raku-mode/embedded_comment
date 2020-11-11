@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: embedded-comment
+# key: embed-comment
+# --
+#`( ${1:write embedded comment here} ) $0

@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: comment
+# name: Single line comment
 # key: comment
 # --
 # ${1:single-line comment}

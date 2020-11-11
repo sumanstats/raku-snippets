@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: codeblock
+# key: codeb
+# --
+=begin code
+$1
+=end code
+$0

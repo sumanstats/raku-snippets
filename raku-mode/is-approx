@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: is approx comparison
+# key: isa
+# --
+is-approx ${1:value}, ${2:expected}, :abs-tol<${3:absolute tolerance}>, :rel-tol<${4:relative tolerance}>, '${5:test description}';
+$0
