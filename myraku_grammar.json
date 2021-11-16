@@ -1,0 +1,233 @@
+{
+	"information for contributors": [
+		"This file is written from scratch.",
+		"If you want to contribute send a PR to the repo"
+	],
+	"version": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "myRaku",
+	"scopeName": "source.myraku",
+	"patterns": [
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#storage"
+		},
+		{
+			"include": "#support"
+		},
+		{
+			"include": "#meta"
+		},
+		{
+			"include": "#variables"
+		},
+		{
+			"include": "#constants"
+		},
+		{
+			"include": "#operators"
+		}
+	],
+	"repository": {
+		"comments": {
+			"patterns": [
+				{
+					"begin": "^=begin\\s+comment",
+					"end": "^=end\\s+comment",
+					"name": "comment.block.raku"
+				},
+				{
+					"begin": "#`[\\(\\{\\[\\<]",
+					"end": "[\\)\\}\\]\\>]",
+					"name": "comment.block.raku"
+				},
+				{
+					"match": "(?<=\\s*)#(?!!).*\n$",
+					"name": "comment.line.number-sign.raku"
+				},
+				{
+					"match": "#`[\\(\\{\\[\\<]+.*[\\)\\}\\]\\>]+$",
+					"name": "comment.line.number-sign.raku"
+				}
+			]
+		},
+		"keywords": {
+			"patterns": [
+				{
+					"match": "((?<=\\s*)#!/.*?\\s\\braku\\b)|(use\\s+v6\\b)",
+					"name": "keyword.other.shebang.raku"
+				},
+				{
+					"match": "\\b(if|else|elsif|unless)\\b",
+					"name": "keyword.control.conditional.perl"
+				},
+				{
+					"match": "\\b(for|loop|repeat|while|until|gather|given)\\b",
+					"name": "keyword.control.repeat.raku"
+				},
+				{
+					"match": "\\b(take|do|when|next|last|redo|return|contend|maybe|defer|default|exit|make|continue|break|goto|leave|async|lift)\\b",
+					"name": "keyword.control.flowcontrol.raku"
+				},
+				{
+					"name": "keyword.operator.arithmetic.raku",
+					"match": "(\\-|\\+|\\*|\\/|%|%%|\\+\\+|\\-\\-|\\*\\*|<>|<<>>|(\\d+\\^\\d+))"
+				},
+				{
+					"name": "keyword.operator.comparison.raku",
+					"match": "(<|<=|!=|==|>=|>|~=)"
+				},
+				{
+					"name": "keyword.operator.literal.raku",
+					"match": "\\b(div|xx|x|mod|also|leg|cmp|before|after|eq|ne|le|lt|not|gt|ge|eqv|ff|fff|and|andthen|or|xor|orelse|extra|lcm|gcd)\\b"
+				},
+				{
+					"name": "keyword.other.include.raku",
+					"match": "\\b(use|require)\\b"
+				},
+				{
+					"match": "\\b(die|fail|try|warn)\\b",
+					"name": "keyword.control.control-handlers.raku"
+				},
+				{
+					"match": "\\b(oo|fatal)\\b",
+					"name": "keyword.other.pragma.raku"
+				}
+			]
+		},
+		"strings": {
+			"patterns": [
+				{
+					"begin": "'",
+					"end": "'",
+					"name": "string.quoted.single"
+				},
+				{
+					"begin": "\"",
+					"end": "\"",
+					"name": "string.quoted.double"
+				}
+			]
+		},
+		"storage": {
+			"patterns": [
+				{
+					"name": "storage.type.names.raku",
+					"match": "\\b(class|sub)\\b"
+				}
+			]
+		},
+		"support": {
+			"patterns": [
+				{
+					"name": "support.type.raku",
+					"match": "\\b(Int|Rat|Cool|Real|FatRat|Rational|Numeric|Num|Order|Bool|Any|Array|Seq|Set|Str|Bag|Grammar|Role)\\b"
+				},
+				{
+					"match": "\\b(abs|conj|EVAL|sqrt|sign|rand|sin|asin|cos|acos|tan|atan|atan2|sec|asec|cosec|acosec|cotan|acotan|sinh|asinh|cosh|acosh|tanh|atanh|sech|asech|cosech|acosech|cotanh|acotanh|cis|log|log10|log2|exp|unpolar|round|floor|fmt|ceiling|truncate|ord|path|chr|chars|codes|flip|trim|lc|uc|fc|tc|tclc|wordcase|samecase|uniprop|uniprops|uniname|uninames|unimatch|chop|chomp|substr|ords|chrs|split|lines|words|comb|contains|index|rindex|match|roots|match|subst|trans|IO)\\b",
+					"name": "support.function.Cool.raku"
+				},
+				{
+					"match": "\\b(new|iterator|is-lazy|elems|from-loop|sink|skip)\\b",
+					"name": "support.function.Seq.raku"
+				},
+				{
+					"match": "\\b(chop|chomp|contains|lc|uc|fc|tc|tclc|wordcase|unival|univals|chars|encode|index|rindex|indices|match|Numeric|Int|Rat|Bool|uniparse|split|comb|lines|words|flip|subst|substitution|Examples|substr|samemark|succ|pred|ord|ords|trans|indent|trim|NFC|NFD|NFKC|NFKD|ACCEPTS|Capture|val|Version|Date|DateTime)\\b",
+					"name": "support.function.Str.raku"
+				},
+				{
+					"match": "\\b(parse|subparse|parsefile)\\b",
+					"name": "support.function.Grammar.raku"
+				}
+			]
+		},
+		"variables": {
+			"patterns": [
+				{
+					"name": "variable.language.support.raku",
+					"match": ":auth|:ver"
+				}
+			]
+		},
+		"constants": {
+			"patterns": [
+				{
+					"match": "\\b(pi)\\b",
+					"name": "constant.other.raku"
+				},
+				{
+					"match": "\\b(True|False)\\b",
+					"name": "constant.language.raku"
+				},
+				{
+					"match": "\\b0(x|X)[0-9a-fA-F]+i\\b",
+					"name": "constant.numeric.imaginary.hexadecimal.raku"
+				},
+				{
+					"match": "\\b[0-9]+\\.?[0-9]*(?:(e|E)(\\+|-)?[0-9]+)?i\\b",
+					"name": "constant.numeric.imaginary.decimal.raku"
+				},
+				{
+					"match": "\\.[0-9]+(?:(e|E)(\\+|-)?[0-9]+)?i\\b",
+					"name": "constant.numeric.imaginary.decimal.raku"
+				},
+				{
+					"match": "\\b[0-9]+(\\+|-)?\\.{1}[0-9]+i\\b",
+					"name": "constant.numeric.imaginary.decimal.raku"
+				},
+				{
+					"match": "\\b[0-9]+\\b",
+					"name": "constant.numeric.integer.raku"
+				},
+				{
+					"match": "\\b0(x|X)[0-9a-fA-F]+\\b",
+					"name": "constant.numeric.integer.hexadecimal.raku"
+				},
+				{
+					"match": "\\b(?:[0-9]+\\.?[0-9]*)\\b",
+					"name": "constant.numeric.integer.decimal.raku"
+				},
+				{
+					"match": "\\b0(x|X)[0-9a-fA-F]+\\b",
+					"name": "constant.numeric.float.hexadecimal.raku"
+				},
+				{
+					"match": "\\b[0-9]+\\.?[0-9]*(?:(e|E)(\\+|-)?[0-9]+)?\\b",
+					"name": "constant.numeric.float.decimal.raku"
+				},
+				{
+					"match": "\\b.[0-9]+(?:(e|E)(\\+|-)?[0-9]+)?\\b",
+					"name": "constant.numeric.float.decimal.raku"
+				},
+				{
+					"match": "\\b(NaN|Inf|∞)\\b",
+					"name": "constant.numeric."
+				}
+			]
+		},
+		"operators": {
+			"patterns": [
+				{
+					"name": "keyword.operator.infix.raku",
+					"match": "\\b(~\\||~\\^|(?<=\\?)\\^|\\?\\||x|xx|~|∘|&|∩| \\(\\.\\)|⊍)\\b"
+				},
+				{
+					"name": "keyword.operator.infix.raku",
+					"comment": "infix operators in https://docs.raku.org/language/operators",
+					"match": "\\b(\\+\\||\\+\\^|\\+&|\\+<|\\+>|~&|~<|~>|\\?&)\\b"
+				},
+				{
+					"name": "keyword.operator.other.raku",
+					"match": "\\b(==>|<==|>>\\.)\\b"
+				}
+			]
+		}
+	}
+}
