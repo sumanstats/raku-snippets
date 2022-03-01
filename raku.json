@@ -10,6 +10,7 @@
                  "# ~: ${1:Description}",
 		 "# File: $TM_FILENAME",
                  "#======================================================#",
+		 "$0"
 		],
 	 "description": "Header in a script with author, date, filename"
 }
