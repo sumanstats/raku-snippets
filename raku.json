@@ -1,5 +1,19 @@
 {
 
+	
+"Header": {
+	"prefix": "header",
+	 "body": [
+		 "#======================================================#",
+                 "# Author: Dr Suman Khanal",
+                 "# Date creation: $CURRENT_DAY_NAME $CURRENT_MONTH_NAME_SHORT $CURRENT_DATE $CURRENT_YEAR, $CURRENT_HOUR:$CURRENT_MINUTE:$CURRENT_SECOND",
+                 "# ~: ${1:Description}",
+		 "# File: $TM_FILENAME",
+                 "#======================================================#",
+		],
+	 "description": "Header in a script with author, date, filename"
+	}
+	
 "New variable": {
 	"prefix": "var",
 	"body": [
