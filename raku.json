@@ -12,7 +12,31 @@
                  "#======================================================#",
 		],
 	 "description": "Header in a script with author, date, filename"
-	}
+}
+
+	
+"Single line comment": {
+	"scope": "perl6",
+	"prefix": "slcom",
+	"body": [
+		"# $1"
+	],
+	"description": "Single line comment"
+}
+
+"Multiline comment": {
+	"scope": "perl6",
+	"prefix": "mlcom",
+	"body": [
+		"#`[",
+		"$1",
+		"]"
+	],
+	"description": "Multiline comment"
+}
+	
+	
+	
 	
 "New variable": {
 	"prefix": "var",
