@@ -1,322 +1,326 @@
 {
 
 	
-"Header": {
-	"prefix": "header",
-	 "body": [
-		 "#======================================================#",
-                 "# Author: Dr Suman Khanal",
-                 "# Date creation: $CURRENT_DAY_NAME $CURRENT_MONTH_NAME_SHORT $CURRENT_DATE $CURRENT_YEAR, $CURRENT_HOUR:$CURRENT_MINUTE:$CURRENT_SECOND",
-                 "# ~: ${1:Description}",
-		 "# File: $TM_FILENAME",
-                 "#======================================================#",
-		 "$0"
+	"Header": {
+		"prefix": "header",
+		 "body": [
+			 "#======================================================#",
+			 "# Author: Dr Suman Khanal",
+			 "# Date creation: $CURRENT_DAY_NAME $CURRENT_MONTH_NAME_SHORT $CURRENT_DATE $CURRENT_YEAR, $CURRENT_HOUR:$CURRENT_MINUTE:$CURRENT_SECOND",
+			 "# ~: ${1:Description}",
+			 "# File: $TM_FILENAME",
+			 "#======================================================#",
+			 "$0"
+			],
+		 "description": "Header in a script with author, date, filename"
+	}
+	
+		
+	"Single line comment": {
+		"scope": "perl6",
+		"prefix": "slcom",
+		"body": [
+			"# $1"
 		],
-	 "description": "Header in a script with author, date, filename"
-}
-
+		"description": "Single line comment"
+	}
 	
-"Single line comment": {
-	"scope": "perl6",
-	"prefix": "slcom",
-	"body": [
-		"# $1"
-	],
-	"description": "Single line comment"
-}
-
-"Multiline comment": {
-	"scope": "perl6",
-	"prefix": "mlcom",
-	"body": [
-		"#`[",
-		"$1",
-		"]"
-	],
-	"description": "Multiline comment"
-}
+	"Multiline comment": {
+		"scope": "perl6",
+		"prefix": "mlcom",
+		"body": [
+			"#`[",
+			"$1",
+			"]"
+		],
+		"description": "Multiline comment"
+	}
+		
+		
+		
+		
+	"New variable": {
+		"prefix": "var",
+		"body": [
+			"my ${1:name} = ${2:value};"
+		],
+		"description": "variable"
+	}
+	
+	"Say": {
+		"prefix": "say",
+		"body": [
+			"say $1;"
+		],
+		"description": "Printing without newline"
+	}
+	
+	"Print": {
+		"prefix": "print",
+		"body": [
+			"print $1;"
+		],
+		"description": "Print with newline"
+	}
+	"For loop": {
+		"prefix": "for",
+		"body": [
+			"for ${1:iterable} {"
+				"\t${2:block} ;"
+				"}"
+				"$0"
+		],
+		"description": "local variable"
+	}
 	
 	
+	"Forwhen": {
+		"prefix": "forwhen",
+		"body": [
+			"for $1 {"
+				"\twhen $2 {$3}"
+				"\twhen $4 {$5}"
+				"\tdefault {$6}"
+				"}"
+				"$0"		
+		],
+		"description": "For loop with when body similar to given"
+	}
 	
+	"Forp loop": {
+		"prefix": "forp",
+		"body": [
+			"for $1 -> $2 {"
+				"\t${3:block} ;"
+				"}"
+				"$0"
+		],
+		"description": "For loop with pointy block"
+	}
 	
-"New variable": {
-	"prefix": "var",
-	"body": [
-		"my ${1:name} = ${2:value};"
-	],
-	"description": "variable"
-}
-
-"Say": {
-	"prefix": "say",
-	"body": [
-		"say $1;"
-	],
-	"description": "Printing without newline"
-}
-
-"Print": {
-	"prefix": "print",
-	"body": [
-		"print $1;"
-	],
-	"description": "Print with newline"
-}
-"For loop": {
-	"prefix": "for",
-	"body": [
-		"for ${1:iterable} {"
-			"\t${2:block} ;"
-			"\t}"
-			"$0"
-	],
-	"description": "local variable"
-}
-
-
-"Forwhen": {
-	"prefix": "forwhen",
-	"body": [
-		"for $1 {"
-			"\twhen $2 {$3}"
-			"\twhen $4 {$5}"
-			"\tdefault {$6}"
-			"}"
-			"$0"		
-	],
-	"description": "For loop with when body similar to given"
-}
-
-"Forp loop": {
-	"prefix": "forp",
-	"body": [
-		"for $1 -> $2 {"
-			"\t${3:block} ;"
-			"\t}"
-			"$0"
-	],
-	"description": "For loop with pointy block"
-}
-
-"Conditional1": {
-	"prefix": "if",
-	"body": [
-		"if ${1:condition} {"
-			"\t${2:block};"
-			"} $0"
-	],
-	"description": "If conditional"
-}
-
-"Conditional2": {
-	"prefix": "elsif",
-	"body": [
-		"elsif ${1:condition} {"
-			"\t${2:block};"
-			"} $0"
-	],
-	"description": "Else if branch"
-}
-
-"Conditional3": {
-	"prefix": "else",
-	"body": [
-		"else {"
-			"\t${1:block};"
-			"};"
-			"$0"
-	],
-	"description": "Else branch"
-}
-
-"While": {
-	"prefix": "while",
-	"body": [
-		"while ${1:condition} {"
+	"Conditional1": {
+		"prefix": "if",
+		"body": [
+			"if ${1:condition} {"
+				"\t${2:block};"
+				"} $0"
+		],
+		"description": "If conditional"
+	}
+	
+	"Conditional2": {
+		"prefix": "elsif",
+		"body": [
+			"elsif ${1:condition} {"
+				"\t${2:block};"
+				"} $0"
+		],
+		"description": "Else if branch"
+	}
+	
+	"Conditional3": {
+		"prefix": "else",
+		"body": [
+			"else {"
+				"\t${1:block};"
+				"};"
+				"$0"
+		],
+		"description": "Else branch"
+	}
+	
+	"While": {
+		"prefix": "while",
+		"body": [
+			"while ${1:condition} {"
 			"\t${2:block of code};"
 			"}"
 			"$0"		
-	],
-	"description": "while statement"
-}
-
-
-"Function": {
-	"prefix": "sub",
-	"body": [
-		"sub ${1:name}(${2:parameters}) {"
+		],
+		"description": "while statement"
+	}
+	
+	
+	"Function": {
+		"prefix": "sub",
+		"body": [
+			"sub ${1:name}(${2:parameters}) {"
 			"\t${3:body};"
 			"}"
 			"$0"
-	],
-	"description": "subroutine"
-}
-
-
-"Function2": {
-	"prefix": "subexp",
-	"body": [
-		"sub ${1:name}(${2:parameters}) is export {"
+		],
+		"description": "subroutine"
+	}
+	
+	
+	"Function2": {
+		"prefix": "subexp",
+		"body": [
+			"sub ${1:name}(${2:parameters}) is export {"
 			"\t${3:body};"
 			"}"
 			"$0"
-	],
-	"description": "subroutine to export from a module"
-}
-
-"Class": {
-	"prefix": "cls",
-	"body": [
-		"class ${1:name} {"
-			"\thas ${2:attribute};"
-			"\thas ${3:attribute};"
-			"\tmethod ${4:behavior}(${5:parameters}) {"
+		],
+		"description": "subroutine to export from a module"
+	}
+	
+	"Class": {
+		"prefix": "cls",
+		"body": [
+			"class ${1:name} {"
+				"\thas ${2:attribute};"
+				"\thas ${3:attribute};"
+				"\tmethod ${4:behavior}(${5:parameters}) {"
 				"\t\t${6:body};"
 				"\t}$7"
 				"}"
 				"$0"
-	],
-	"description": "Class definition"
-}
-
-"Method": {
-	"prefix": "md",
-	"body": [
-		"method ${1:name}(${2:parameters}) {"
+		],
+		"description": "Class definition"
+	}
+	
+	"Method": {
+		"prefix": "md",
+		"body": [
+			"method ${1:name}(${2:parameters}) {"
 			"\t$3;"
 			"}"
 			"$0"
-	],
-	"description": "method"
-}
-
-"Multi Subroutines": {
-	"prefix": "multi",
-	"body": [
-		"multi sub ${1:name}(${2:parameters}) {"
+		],
+		"description": "method"
+	}
+	
+	"Multi Subroutines": {
+		"prefix": "multi",
+		"body": [
+			"multi sub ${1:name}(${2:parameters}) {"
 			"\t${3:body}"
 			"}"
 			"$0"		
-	],
-	"description": "multi subroutines"
-}
-
-"Given": {
-	"prefix": "given",
-	"body": [
-		"given $1 {"
+		],
+		"description": "multi subroutines"
+	}
+	
+	"Given": {
+		"prefix": "given",
+		"body": [
+			"given $1 {"
 			"\twhen $2 {$3}"
 			"\twhen $4 {$5}"
 			"\tdefault {$6}"
 			"}"
 			"$0"		
-	],
-	"description": "given statement"
-}
-
-"Loop": {
-	"prefix": "loop",
-	"body": [
-		"loop (${1:initializer}; ${2:conditional}; ${3:incrementer}) {"
+		],
+		"description": "given statement"
+	}
+	
+	"Loop": {
+		"prefix": "loop",
+		"body": [
+			"loop (${1:initializer}; ${2:conditional}; ${3:incrementer}) {"
 			"\t${4:block};"
 			"}"
 			"$0"		
-	],
-	"description": "loop statement"
-}
-
-
-"Grammar": {
-	"prefix": "gm",
-	"body": [
-		"grammar $1 {"
-			"\t$2"
-			"}"
-		    "$0"		
-	],
-	"description": "Creating grammar"
-}
-
-"Token": {
-	"prefix": "token",
-	"body": [
-		"token $1 {$2}"
-		"$0"		
-	],
-	"description": "token"
-}
-
-"Rolegrammar": {
-	"prefix": "role",
-	"body": [
-		"role $1 {"
+		],
+		"description": "loop statement"
+	}
+	
+	
+	"Grammar": {
+		"prefix": "gm",
+		"body": [
+			"grammar $1 {"
 			"\t$2"
 			"}"
 			"$0"		
-	],
-	"description": "role grammar"
-}
-
-"Rulegrammar": {
-	"prefix": "rule",
-	"body": [
-		"rule $1 {$2}"
-		"$0"		
-	],
-	"description": "rule"
-}
-
-"Regex": {
-	"prefix": "regex",
-	"body": [
-		"regex $1 {"
-		"\t$2"
-		"}"
-		"$0"		
-	],
-	"description": "regex"
-}
-
-"Main function": {
-	"prefix": "main",
-	"body": [
-		"sub MAIN(${1:parameters}) {"
+		],
+		"description": "Creating grammar"
+	}
+	
+	"Token": {
+		"prefix": "token",
+		"body": [
+			"token $1 {$2}"
+			"$0"		
+		],
+		"description": "token"
+	}
+	
+	"Rolegrammar": {
+		"prefix": "role",
+		"body": [
+			"role $1 {"
+			"\t$2"
+			"}"
+			"$0"		
+		],
+		"description": "role grammar"
+	}
+	
+	"Rulegrammar": {
+		"prefix": "rule",
+		"body": [
+			"rule $1 {$2}"
+			"$0"		
+		],
+		"description": "rule"
+	}
+	
+	"Regex": {
+		"prefix": "regex",
+		"body": [
+			"regex $1 {"
+			"\t$2"
+			"}"
+			"$0"		
+		],
+		"description": "regex"
+	}
+	
+	"Main function": {
+		"prefix": "main",
+		"body": [
+			"sub MAIN(${1:parameters}) {"
 			"\t${2:body}"
 			"}"
 			"$0"		
-	],
-	"description": "MAIN function"
-}
-
-"NativeCall1": {
-	"prefix": "natc1",
-	"body": [
-		"use NativeCall;"
-		"$0"
-	],
-	"description": "use NativeCall"
-}
-
-
-"NativeCall2": {
-	"prefix": "natc2",
-	"body": [
-		"sub ${1:some_argless_function}() is native(\"${2:shared_library}\") { * };"
-		"$0"
-	],
-	"description": "argless function"
-}
-
-
-"NativeCall3": {
-	"prefix": "natc3",
-	"body": [
-		"sub ${1:function_name}(${2:argument_types}) returns ${3:return_type} is native(\"${4:shared_library}\") is symbol('${5:name_of_function_inside_shared_library}') { * };"
-		"$0"
-	],
-	"description": "specify the name of the native routine in your library "
-}
-
-
-
-}
+		],
+		"description": "MAIN function"
+	}
+	
+	"NativeCall1": {
+		"prefix": "natic",
+		"body": [
+			"use NativeCall;"
+			"$0"
+		],
+		"description": "use NativeCall"
+	}
+	
+	
+	"NativeCall2": {
+		"prefix": "naticf",
+		"body": [
+			"sub ${1:function_name}(${2:parameters}) returns ${3:return_type}",
+			"\tis native(\"${4:shared_library}\") { * };"
+			"$0"
+		],
+		"description": "Simple function function in NativeCall"
+	}
+	
+	
+	"NativeCall3": {
+		"prefix": "naticfs",
+		"body": [
+			"sub ${1:function_name}(${2:argument_types}) returns ${3:return_type}",
+			"\tis native(\"${4:shared_library}\")",
+			"\tis symbol('${5:name_of_function_inside_shared_library}') { * };"
+			"$0"
+		],
+		"description": "Call nativecall while specifying the name of the native routine in your library "
+	}
+	
+	
+	
+	}
+	
