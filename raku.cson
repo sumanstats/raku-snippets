@@ -21,10 +21,7 @@
 # http://flight-manual.atom.io/using-atom/sections/basic-customization/#_cson
 
 '.source.perl6':
-   'Console log':
-     'prefix': 'log'
-     'body': 'console.log($1)'
-
+   
     'New variable':
       'prefix': 'var',
       'body':
@@ -246,7 +243,7 @@
         """
 
     'NativeCall1':
-      'prefix': 'natc1',
+      'prefix': 'natic',
       'body':
         """
         use NativeCall;
@@ -254,17 +251,20 @@
         """
 
     'NativeCall2':
-      'prefix': 'natc2',
+      'prefix': 'naticf',
       'body':
         """
-        sub ${1:some_argless_function}() is native(\"${2:shared_library}\") { * };
-        $3
+        sub ${1:function_name}(${2:parameters}) returns ${3:return_type}
+		is native(\"${4:shared_library}\") { * };
+        $5
         """
 
     'NativeCall3':
-      'prefix': 'natc3',
+      'prefix': 'naticfs',
       'body':
         """
-        sub ${1:function_name}(${2:argument_types}) returns ${3:return_type} is native(\"${4:shared_library}\") is symbol('${5:name_of_function_inside_shared_library}') { * };
+        sub ${1:function_name}(${2:parameters}) returns ${3:return_type}
+		is native(\"${4:shared_library}\")
+		is symbol('${5:name_of_function_inside_shared_library}') { * };
         $6
         """
