@@ -20,8 +20,36 @@
 # Atom Flight Manual:
 # http://flight-manual.atom.io/using-atom/sections/basic-customization/#_cson
 
-'.source.perl6':
-   
+'.source.perl6fe':
+
+    'Header':
+      'prefix': 'header',
+      'body':
+        """
+        #======================================================#
+			  # Author: Dr Suman Khanal
+			  # Date creation: $CURRENT_DAY_NAME $CURRENT_MONTH_NAME_SHORT $CURRENT_DATE $CURRENT_YEAR, $CURRENT_HOUR:$CURRENT_MINUTE:$CURRENT_SECOND
+			  # ~: ${1:Description}
+			  # File: $TM_FILENAME
+			  #======================================================#
+			  """
+
+
+    'Single line comment':
+      'prefix': 'slcom',
+      'body':
+        """
+        # $1
+        """
+    'Multi line comment':
+      'prefix': 'mlcom',
+      'body':
+        """
+        #`[
+        $1
+        ]
+        """
+
     'New variable':
       'prefix': 'var',
       'body':
@@ -69,17 +97,17 @@
         $7
         """
 
-   'Forp loop':
-	   'prefix': 'forp',
-	   'body':
-       """
-       for $1 -> $2 {
-         ${3:block}
-       }
-       $4
-       """
+    'Forp loop':
+      'prefix': 'forp',
+      'body':
+        """
+        for $1 -> $2 {
+          ${3:block}
+        }
+        $4
+        """
 
-   'Conditional1':
+    'Conditional1':
       'prefix': 'if',
       'body':
         """
@@ -109,15 +137,15 @@
         $2
         """
 
-   'While':
-     'prefix': 'while',
-     'body':
-       """
-       while ${1:condition} {
-         ${2:block of code};
-       }
-       $3
-       """
+    'While':
+      'prefix': 'while',
+      'body':
+        """
+        while ${1:condition} {
+          ${2:block of code};
+        }
+        $3
+        """
 
     'Function':
       'prefix': 'fun',
@@ -255,7 +283,7 @@
       'body':
         """
         sub ${1:function_name}(${2:parameters}) returns ${3:return_type}
-		is native(\"${4:shared_library}\") { * };
+          is native(\"${4:shared_library}\") { * };
         $5
         """
 
@@ -264,7 +292,7 @@
       'body':
         """
         sub ${1:function_name}(${2:parameters}) returns ${3:return_type}
-		is native(\"${4:shared_library}\")
-		is symbol('${5:name_of_function_inside_shared_library}') { * };
+          is native(\"${4:shared_library}\")
+          is symbol('${5:name_of_function_inside_shared_library}') { * };
         $6
         """
