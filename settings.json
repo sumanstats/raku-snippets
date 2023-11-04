@@ -1,11 +1,14 @@
 # My vscode setting file
 
+# New version of VS code detect raku extensions
+# To execute with code runner add "code-runner.executorMap": {
+#        "raku": "perl6"
+#    }  
+
 {
     "security.workspace.trust.untrustedFiles": "open",
-    "files.associations": {
-        "*.raku": "perl6",
-        "*.rakumod": "perl6",
-        "*.rakutest": "perl6"
+    "code-runner.executorMap": {
+        "raku": "perl6"
     },
     "workbench.startupEditor": "none",
     "editor.fontSize": 16,
