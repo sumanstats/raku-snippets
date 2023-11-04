@@ -32,7 +32,7 @@
 			"#=====================================================================#",
 			"$0"
 		],
-		"description": "Single line comment"
+		"description": "Header line separation to make code more readable"
 	}
 
 	"Multiline comment": {
