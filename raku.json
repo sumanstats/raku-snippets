@@ -25,6 +25,16 @@
 		"description": "Single line comment"
 	}
 	
+	"Header comment": {
+		"scope": "perl6",
+		"prefix": "headcom",
+		"body": [
+			"#=====================================================================#",
+			"$0"
+		],
+		"description": "Single line comment"
+	}
+
 	"Multiline comment": {
 		"scope": "perl6",
 		"prefix": "mlcom",
