@@ -8,7 +8,7 @@
 {
     "security.workspace.trust.untrustedFiles": "open",
     "code-runner.executorMap": {
-        "raku": "perl6"
+        "raku": "raku"
     },
     "workbench.startupEditor": "none",
     "editor.fontSize": 16,
