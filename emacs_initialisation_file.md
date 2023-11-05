@@ -2,25 +2,12 @@
 
 
 
-For this install `company` mode, `ess`, `solarised theme`, `elpy`, `yasnippet-snippets`, `smartparens-config` and `lsp-mode`. Put this configuration in `init.el` inside `.emacs.d` directory.
+For this install `company` mode, `ess`, `markdown-mode`,  `solarised theme`, `elpy`, `yasnippet-snippets`, `smartparens-config` and `lsp-mode`. Put this configuration in `init.el` inside `.emacs.d` directory.
 
 ```
 (require 'package)
 (add-to-list 'package-archives
              '("melpa-stable" . "https://stable.melpa.org/packages/"))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(raku-mode markdown-mode+ websocket ein yasnippet-classic-snippets smartparens company-lsp lsp-ui yasnippet-snippets elpy lsp-mode company solarized-theme ess)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 (package-initialize)
 (add-hook 'emacs-startup-hook 'toggle-frame-maximized)
 (setq default-directory "c:/Users/suman/")
