@@ -2,7 +2,7 @@
 
 
 
-For this install `company` mode, `ess`, `markdown-mode`,  `solarised theme`, `elpy`, `yasnippet-snippets`, `smartparens-config` and `lsp-mode`. Put this configuration in `init.el` inside `.emacs.d` directory.
+For this install `company` mode, `ess`, `solarised theme`, `elpy`, `yasnippet-snippets`, `smartparens` and `lsp-mode`. Put this configuration in `init.el` inside `.emacs.d` directory.
 
 ```
 (require 'package)
@@ -32,17 +32,7 @@ For this install `company` mode, `ess`, `markdown-mode`,  `solarised theme`, `el
 				 (yas-activate-extra-mode 'fundamental-mode)))
 (require 'smartparens-config)
 (smartparens-global-mode t)
-;; load markdown-mode after cloning from github
-
-(add-to-list 'load-path "~/.emacs.d/markdown-mode")
-(autoload 'markdown-mode "markdown-mode"
-   "Major mode for editing Markdown files" t)
-(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-
-
-(autoload 'gfm-mode "markdown-mode"
-   "Major mode for editing GitHub Flavored Markdown files" t)
-(add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
-
 ```
+
+
+To enable `markdown-mode`, install as in their docs.
