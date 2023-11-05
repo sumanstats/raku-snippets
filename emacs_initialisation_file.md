@@ -2,7 +2,7 @@
 
 
 
-For this install `company` mode, `ess`, `solarised theme` and `lsp-mode`. Put this configuration in `init.el` inside `.emacs.d` directory.
+For this install `company` mode, `ess`, `solarised theme`, `elpy`, `yasnippet-snippets`, `smartparens-config` and `lsp-mode`. Put this configuration in `init.el` inside `.emacs.d` directory.
 
 ```
 (require 'package)
@@ -30,7 +30,6 @@ For this install `company` mode, `ess`, `solarised theme` and `lsp-mode`. Put th
 (setq ess-tab-complete-in-script 1)
 (setq ess-ask-for-ess-directory t)
 (load-theme 'solarized-light t)
-(global-linum-mode t)     ;;enable line numbers
 ;;(elpy-enable)
 (add-hook 'after-init-hook 'global-company-mode)
 (set-face-attribute 'default nil :font "JetBrains Mono-18")
