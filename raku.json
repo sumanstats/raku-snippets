@@ -1,7 +1,6 @@
-{
-
-	
+{	
 	"Header": {
+		"scope": "raku",
 		"prefix": "header",
 		 "body": [
 			 "#======================================================#",
@@ -17,7 +16,7 @@
 	
 		
 	"Single line comment": {
-		"scope": "perl6",
+		"scope": "raku",
 		"prefix": "slcom",
 		"body": [
 			"# $1"
@@ -25,18 +24,19 @@
 		"description": "Single line comment"
 	}
 	
-	"Header comment": {
-		"scope": "perl6",
-		"prefix": "headcom",
+	"Start new block": {
+		"scope": "raku",
+		"prefix": "para",
 		"body": [
 			"#=====================================================================#",
-			"$0"
+			"$1"
 		],
-		"description": "Header line separation to make code more readable"
+		"description": "Start new block"
 	}
 
+	
 	"Multiline comment": {
-		"scope": "perl6",
+		"scope": "raku",
 		"prefix": "mlcom",
 		"body": [
 			"#`[",
@@ -50,101 +50,113 @@
 		
 		
 	"New variable": {
+		"scope": "raku",
 		"prefix": "var",
 		"body": [
-			"my ${1:name} = ${2:value};"
+			"my ${1:name} = ${2:value};",
+			"$0"
 		],
 		"description": "variable"
 	}
 	
-	"Say": {
+	"Printing with newline": {
+		"scope": "raku",
 		"prefix": "say",
 		"body": [
 			"say $1;"
 		],
-		"description": "Printing without newline"
+		"description": "Printing with newline"
 	}
 	
 	"Print": {
+		"scope": "raku",
 		"prefix": "print",
 		"body": [
 			"print $1;"
 		],
-		"description": "Print with newline"
+		"description": "Writes the given text to the handle without newline, coercing any non-Str objects to Str by calling .Str method on them"
 	}
+
 	"For loop": {
+		"scope": "raku",
 		"prefix": "for",
 		"body": [
-			"for ${1:iterable} {"
-				"\t${2:block} ;"
-				"}"
+			"for ${1:iterable} {",
+				"\t${2:block} ;",
+				"}",
 				"$0"
 		],
-		"description": "local variable"
+		"description": "For loop in raku"
 	}
 	
 	
 	"Forwhen": {
+		"scope": "raku",
 		"prefix": "forwhen",
 		"body": [
-			"for $1 {"
-				"\twhen $2 {$3}"
-				"\twhen $4 {$5}"
-				"\tdefault {$6}"
-				"}"
+			"for $1 {",
+				"\twhen $2 {$3}",
+				"\twhen $4 {$5}",
+				"\tdefault {$6}",
+				"}",
 				"$0"		
 		],
-		"description": "For loop with when body similar to given"
+		"description": "For loop with when body, similar to given"
 	}
 	
 	"Forp loop": {
+		"scope": "raku",
 		"prefix": "forp",
 		"body": [
-			"for $1 -> $2 {"
-				"\t${3:block} ;"
-				"}"
+			"for $1 -> $2 {",
+				"\t${3:block} ;",
+				"}",
 				"$0"
 		],
 		"description": "For loop with pointy block"
 	}
 	
 	"Conditional1": {
+		"scope": "raku",
 		"prefix": "if",
 		"body": [
-			"if ${1:condition} {"
-				"\t${2:block};"
+			"if ${1:condition} {",
+				"\t${2:block};",
 				"} $0"
 		],
 		"description": "If conditional"
 	}
 	
 	"Conditional2": {
+		"scope": "raku",
 		"prefix": "elsif",
 		"body": [
-			"elsif ${1:condition} {"
-				"\t${2:block};"
+			"elsif ${1:condition} {",
+				"\t${2:block};",
 				"} $0"
 		],
 		"description": "Else if branch"
 	}
 	
 	"Conditional3": {
+		"scope": "raku",
 		"prefix": "else",
 		"body": [
-			"else {"
-				"\t${1:block};"
-				"};"
+			"else {",
+				"\t${1:block};",
+				"};",
 				"$0"
 		],
 		"description": "Else branch"
 	}
 	
 	"While": {
+		"scope": "raku",
 		"prefix": "while",
 		"body": [
-			"while ${1:condition} {"
-			"\t${2:block of code};"
-			"}"
+			"while ${1:condition} {",
+			"\t${2:block of code};",
+			"}",
 			"$0"		
 		],
 		"description": "while statement"
@@ -152,84 +164,91 @@
 	
 	
 	"Function": {
+		"scope": "raku",
 		"prefix": "sub",
 		"body": [
-			"sub ${1:name}(${2:parameters}) {"
-			"\t${3:body};"
-			"}"
+			"sub ${1:name}(${2:parameters}) {",
+			"\t${3:body};",
+			"}",
 			"$0"
 		],
-		"description": "subroutine"
+		"description": "subroutines in raku called as functions in other langs"
 	}
 	
 	
 	"Function2": {
+		"scope": "raku",
 		"prefix": "subexp",
 		"body": [
-			"sub ${1:name}(${2:parameters}) is export {"
-			"\t${3:body};"
-			"}"
+			"sub ${1:name}(${2:parameters}) is export {",
+			"\t${3:body};",
+			"}",
 			"$0"
 		],
 		"description": "subroutine to export from a module"
 	}
 	
 	"Class": {
+		"scope": "raku",
 		"prefix": "cls",
 		"body": [
-			"class ${1:name} {"
-				"\thas ${2:attribute};"
-				"\thas ${3:attribute};"
-				"\tmethod ${4:behavior}(${5:parameters}) {"
-				"\t\t${6:body};"
-				"\t}$7"
-				"}"
+			"class ${1:name} {",
+				"\thas ${2:attribute};",
+				"\thas ${3:attribute};",
+				"\tmethod ${4:behavior}(${5:parameters}) {",
+				"\t\t${6:body};",
+				"\t}$7",
+				"}",
 				"$0"
 		],
 		"description": "Class definition"
 	}
 	
 	"Method": {
-		"prefix": "md",
+		"scope": "raku",
+		"prefix": "meth",
 		"body": [
-			"method ${1:name}(${2:parameters}) {"
-			"\t$3;"
-			"}"
+			"method ${1:name}(${2:parameters}) {",
+			"\t${3:body};",
+			"}",
 			"$0"
 		],
 		"description": "method"
 	}
 	
 	"Multi Subroutines": {
+		"scope": "raku",
 		"prefix": "multi",
 		"body": [
-			"multi sub ${1:name}(${2:parameters}) {"
-			"\t${3:body}"
-			"}"
+			"multi ${1:subroutine_name}(${2:parameters}) {",
+			"\t${3:body};",
+			"}",
 			"$0"		
 		],
 		"description": "multi subroutines"
 	}
 	
 	"Given": {
+		"scope": "raku",
 		"prefix": "given",
 		"body": [
-			"given $1 {"
-			"\twhen $2 {$3}"
-			"\twhen $4 {$5}"
-			"\tdefault {$6}"
-			"}"
+			"given $1 {",
+			"\twhen $2 {$3}",
+			"\twhen $4 {$5}",
+			"\tdefault {$6}",
+			"}",
 			"$0"		
 		],
 		"description": "given statement"
 	}
 	
 	"Loop": {
+		"scope": "raku",
 		"prefix": "loop",
 		"body": [
-			"loop (${1:initializer}; ${2:conditional}; ${3:incrementer}) {"
-			"\t${4:block};"
-			"}"
+			"loop (${1:initializer}; ${2:conditional}; ${3:incrementer}) {",
+			"\t${4:block};",
+			"}",
 			"$0"		
 		],
 		"description": "loop statement"
@@ -237,89 +256,99 @@
 	
 	
 	"Grammar": {
-		"prefix": "gm",
+		"scope": "raku",
+		"prefix": "gram",
 		"body": [
-			"grammar $1 {"
-			"\t$2"
-			"}"
+			"grammar $1 {",
+			"\ttoken TOP {$2}",
+			"\t$3",
+			"}",
 			"$0"		
 		],
 		"description": "Creating grammar"
 	}
 	
 	"Token": {
+		"scope": "raku",
 		"prefix": "token",
 		"body": [
-			"token $1 {$2}"
+			"token $1 {$2}",
 			"$0"		
 		],
 		"description": "token"
 	}
 	
 	"Rolegrammar": {
+		"scope": "raku",
 		"prefix": "role",
 		"body": [
-			"role $1 {"
-			"\t$2"
-			"}"
+			"role ${1:rolename} {",
+			"\t${2:attributes_and_methods}",
+			"}",
 			"$0"		
 		],
 		"description": "role grammar"
 	}
 	
 	"Rulegrammar": {
+		"scope": "raku",
 		"prefix": "rule",
 		"body": [
-			"rule $1 {$2}"
+			"rule ${1:name} {${2:body}}",
 			"$0"		
 		],
 		"description": "rule"
 	}
 	
 	"Regex": {
+		"scope": "raku",
 		"prefix": "regex",
 		"body": [
-			"regex $1 {"
-			"\t$2"
-			"}"
+			"my regex ${1:name} {",
+			"\t$2",
+			"}",
 			"$0"		
 		],
 		"description": "regex"
 	}
 	
 	"Main function": {
+		"scope": "raku",
 		"prefix": "main",
 		"body": [
-			"sub MAIN(${1:parameters}) {"
-			"\t${2:body}"
-			"}"
+			"sub MAIN(${1:parameters}) {",
+			"\t${2:body};",
+			"}",
 			"$0"		
 		],
 		"description": "MAIN function"
 	}
 	
 	"NativeCall1": {
+		"scope": "raku",
 		"prefix": "natic",
 		"body": [
 			"use NativeCall;"
 			"$0"
 		],
-		"description": "use NativeCall"
+		"description": "use NativeCall in your code"
 	}
 	
 	
 	"NativeCall2": {
+		"scope": "raku",
 		"prefix": "naticf",
 		"body": [
 			"sub ${1:function_name}(${2:parameters}) returns ${3:return_type}",
 			"\tis native(\"${4:shared_library}\") { * };"
 			"$0"
 		],
-		"description": "Simple function function in NativeCall"
+		"description": "Simple nativecall function definition in NativeCall"
 	}
 	
 	
 	"NativeCall3": {
+		"scope": "raku",
 		"prefix": "naticfs",
 		"body": [
 			"sub ${1:function_name}(${2:argument_types}) returns ${3:return_type}",
@@ -328,9 +357,7 @@
 			"$0"
 		],
 		"description": "Call nativecall while specifying the name of the native routine in your library "
-	}
+	}	
 	
-	
-	
-	}
+}
 	
