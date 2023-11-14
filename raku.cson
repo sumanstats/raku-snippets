@@ -115,7 +115,7 @@
         """
         if ${1:condition} {
           ${2:block};
-        }$3
+        } $3
         """
 
 
@@ -125,7 +125,7 @@
         """
         elsif ${1:condition} {
           ${2:block};
-        }$3
+        } $3
         """
 
 
@@ -150,10 +150,20 @@
         """
 
     'Function':
-      'prefix': 'fun',
+      'prefix': 'sub',
       'body':
         """
         sub ${1:name}(${2:parameters}) {
+          ${3:body};
+        }
+        $4
+        """
+
+    'Function2':
+      'prefix': 'subexp',
+      'body':
+        """
+        sub ${1:name}(${2:parameters}) is export {
           ${3:body};
         }
         $4
@@ -175,7 +185,7 @@
         """
 
     'Method':
-      'prefix': 'md',
+      'prefix': 'meth',
       'body':
         """
         method ${1:name}(${2:parameters}) {
@@ -188,7 +198,7 @@
       'prefix': 'multi',
       'body':
         """
-        multi sub ${1:name}(${2:parameters}) {
+        multi ${1:subroutine_name}(${2:parameters}) {
           ${3:body};
         }
         $4
@@ -217,13 +227,14 @@
         """
 
     'Grammar':
-      'prefix': 'gm',
+      'prefix': 'gram',
       'body':
         """
         grammar $1 {
-          $2
+          token TOP {$2}
+          $3
         }
-        $3
+        $4
         """
 
     'Token':
@@ -238,8 +249,8 @@
       'prefix': 'role',
       'body':
         """
-        role $1 {
-          $2
+        role ${1:rolename} {
+          ${2:attributes_and_methods}
         }
         $3
         """
@@ -248,7 +259,7 @@
       'prefix': 'rule',
       'body':
         """
-        rule $1 {$2}
+        rule ${1:name} {${2:body}}
         $3
         """
 
@@ -256,7 +267,7 @@
       'prefix': 'regex',
       'body':
         """
-        regex $1 {
+        my regex ${1:name} {
           $2
         }
         $3
