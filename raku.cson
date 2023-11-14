@@ -20,7 +20,7 @@
 # Atom Flight Manual:
 # http://flight-manual.atom.io/using-atom/sections/basic-customization/#_cson
 
-'.source.perl6fe':
+'.source.raku':
 
     'Header':
       'prefix': 'header',
