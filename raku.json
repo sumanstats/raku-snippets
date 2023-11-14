@@ -12,7 +12,7 @@
 			 "$0"
 			],
 		 "description": "Header in a script with author, date, filename"
-	}
+	},
 	
 		
 	"Single line comment": {
@@ -22,7 +22,7 @@
 			"# $1"
 		],
 		"description": "Single line comment"
-	}
+	},
 	
 	"Start new block": {
 		"scope": "raku",
@@ -32,7 +32,7 @@
 			"$1"
 		],
 		"description": "Start new block"
-	}
+	},
 
 	
 	"Multiline comment": {
@@ -44,7 +44,7 @@
 			"]"
 		],
 		"description": "Multiline comment"
-	}
+	},
 		
 		
 		
@@ -57,7 +57,7 @@
 			"$0"
 		],
 		"description": "variable"
-	}
+	},
 	
 	"Printing with newline": {
 		"scope": "raku",
@@ -66,7 +66,7 @@
 			"say $1;"
 		],
 		"description": "Printing with newline"
-	}
+	},
 	
 	"Print": {
 		"scope": "raku",
@@ -75,7 +75,7 @@
 			"print $1;"
 		],
 		"description": "Writes the given text to the handle without newline, coercing any non-Str objects to Str by calling .Str method on them"
-	}
+	},
 
 	"For loop": {
 		"scope": "raku",
@@ -87,7 +87,7 @@
 				"$0"
 		],
 		"description": "For loop in raku"
-	}
+	},
 	
 	
 	"Forwhen": {
@@ -102,7 +102,7 @@
 				"$0"		
 		],
 		"description": "For loop with when body, similar to given"
-	}
+	},
 	
 	"Forp loop": {
 		"scope": "raku",
@@ -114,7 +114,7 @@
 				"$0"
 		],
 		"description": "For loop with pointy block"
-	}
+	},
 	
 	"Conditional1": {
 		"scope": "raku",
@@ -125,7 +125,7 @@
 				"} $0"
 		],
 		"description": "If conditional"
-	}
+	},
 	
 	"Conditional2": {
 		"scope": "raku",
@@ -136,7 +136,7 @@
 				"} $0"
 		],
 		"description": "Else if branch"
-	}
+	},
 	
 	"Conditional3": {
 		"scope": "raku",
@@ -148,7 +148,7 @@
 				"$0"
 		],
 		"description": "Else branch"
-	}
+	},
 	
 	"While": {
 		"scope": "raku",
@@ -160,7 +160,7 @@
 			"$0"		
 		],
 		"description": "while statement"
-	}
+	},
 	
 	
 	"Function": {
@@ -173,7 +173,7 @@
 			"$0"
 		],
 		"description": "subroutines in raku called as functions in other langs"
-	}
+	},
 	
 	
 	"Function2": {
@@ -186,7 +186,7 @@
 			"$0"
 		],
 		"description": "subroutine to export from a module"
-	}
+	},
 	
 	"Class": {
 		"scope": "raku",
@@ -202,7 +202,7 @@
 				"$0"
 		],
 		"description": "Class definition"
-	}
+	},
 	
 	"Method": {
 		"scope": "raku",
@@ -214,7 +214,7 @@
 			"$0"
 		],
 		"description": "method"
-	}
+	},
 	
 	"Multi Subroutines": {
 		"scope": "raku",
@@ -226,7 +226,7 @@
 			"$0"		
 		],
 		"description": "multi subroutines"
-	}
+	},
 	
 	"Given": {
 		"scope": "raku",
@@ -240,7 +240,7 @@
 			"$0"		
 		],
 		"description": "given statement"
-	}
+	},
 	
 	"Loop": {
 		"scope": "raku",
@@ -252,7 +252,7 @@
 			"$0"		
 		],
 		"description": "loop statement"
-	}
+	},
 	
 	
 	"Grammar": {
@@ -266,7 +266,7 @@
 			"$0"		
 		],
 		"description": "Creating grammar"
-	}
+	},
 	
 	"Token": {
 		"scope": "raku",
@@ -276,7 +276,7 @@
 			"$0"		
 		],
 		"description": "token"
-	}
+	},
 	
 	"Rolegrammar": {
 		"scope": "raku",
@@ -288,7 +288,7 @@
 			"$0"		
 		],
 		"description": "role grammar"
-	}
+	},
 	
 	"Rulegrammar": {
 		"scope": "raku",
@@ -298,7 +298,7 @@
 			"$0"		
 		],
 		"description": "rule"
-	}
+	},
 	
 	"Regex": {
 		"scope": "raku",
@@ -310,7 +310,7 @@
 			"$0"		
 		],
 		"description": "regex"
-	}
+	},
 	
 	"Main function": {
 		"scope": "raku",
@@ -322,17 +322,17 @@
 			"$0"		
 		],
 		"description": "MAIN function"
-	}
+	},
 	
 	"NativeCall1": {
 		"scope": "raku",
 		"prefix": "natic",
 		"body": [
-			"use NativeCall;"
+			"use NativeCall;",
 			"$0"
 		],
 		"description": "use NativeCall in your code"
-	}
+	},
 	
 	
 	"NativeCall2": {
@@ -340,11 +340,11 @@
 		"prefix": "naticf",
 		"body": [
 			"sub ${1:function_name}(${2:parameters}) returns ${3:return_type}",
-			"\tis native(\"${4:shared_library}\") { * };"
+			"\tis native(\"${4:shared_library}\") { * };",
 			"$0"
 		],
 		"description": "Simple nativecall function definition in NativeCall"
-	}
+	},
 	
 	
 	"NativeCall3": {
@@ -353,7 +353,7 @@
 		"body": [
 			"sub ${1:function_name}(${2:argument_types}) returns ${3:return_type}",
 			"\tis native(\"${4:shared_library}\")",
-			"\tis symbol('${5:name_of_function_inside_shared_library}') { * };"
+			"\tis symbol('${5:name_of_function_inside_shared_library}') { * };",
 			"$0"
 		],
 		"description": "Call nativecall while specifying the name of the native routine in your library "
