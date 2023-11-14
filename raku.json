@@ -3,15 +3,25 @@
 		"scope": "raku",
 		"prefix": "header",
 		 "body": [
-			 "#======================================================#",
+			 "#============================================================#",
 			 "# Author: Dr Suman Khanal",
 			 "# Date creation: $CURRENT_DAY_NAME $CURRENT_MONTH_NAME_SHORT $CURRENT_DATE $CURRENT_YEAR, $CURRENT_HOUR:$CURRENT_MINUTE:$CURRENT_SECOND",
 			 "# ~: ${1:Description}",
 			 "# File: $TM_FILENAME",
-			 "#======================================================#",
+			 "#============================================================#",
 			 "$0"
 			],
 		 "description": "Header in a script with author, date, filename"
+	},
+
+	"Start new block": {
+		"scope": "raku",
+		"prefix": "para",
+		"body": [
+			"#============================================================#",
+			"$1"
+		],
+		"description": "Start new block"
 	},
 	
 		
@@ -24,14 +34,13 @@
 		"description": "Single line comment"
 	},
 	
-	"Start new block": {
+	"Embedded comment": {
 		"scope": "raku",
-		"prefix": "para",
+		"prefix": "embcom",
 		"body": [
-			"#=====================================================================#",
-			"$1"
+			"#`(${1:embedded comment}) $0"
 		],
-		"description": "Start new block"
+		"description": "Embedded comment"
 	},
 
 	
@@ -41,11 +50,23 @@
 		"body": [
 			"#`[",
 			"$1",
-			"]"
+			"]",
+			"$0"
 		],
 		"description": "Multiline comment"
 	},
-		
+	
+	"Pod comment": {
+		"scope": "raku",
+		"prefix": "podcom",
+		"body": [
+			"=begin comment",
+			"${1:podcomment}",
+			"=end comment",
+			"\n$0"
+		],
+		"description": "Pod comment"
+	},
 		
 		
 		
@@ -82,9 +103,9 @@
 		"prefix": "for",
 		"body": [
 			"for ${1:iterable} {",
-				"\t${2:block} ;",
-				"}",
-				"$0"
+			"\t${2:block} ;",
+			"}",
+			"$0"
 		],
 		"description": "For loop in raku"
 	},
@@ -95,11 +116,11 @@
 		"prefix": "forwhen",
 		"body": [
 			"for $1 {",
-				"\twhen $2 {$3}",
-				"\twhen $4 {$5}",
-				"\tdefault {$6}",
-				"}",
-				"$0"		
+			"\twhen $2 {$3}",
+			"\twhen $4 {$5}",
+			"\tdefault {$6}",
+			"}",
+			"$0"		
 		],
 		"description": "For loop with when body, similar to given"
 	},
@@ -109,9 +130,9 @@
 		"prefix": "forp",
 		"body": [
 			"for $1 -> $2 {",
-				"\t${3:block} ;",
-				"}",
-				"$0"
+			"\t${3:block} ;",
+			"}",
+			"$0"
 		],
 		"description": "For loop with pointy block"
 	},
@@ -121,8 +142,8 @@
 		"prefix": "if",
 		"body": [
 			"if ${1:condition} {",
-				"\t${2:block};",
-				"} $0"
+			"\t${2:block};",
+			"} $0"
 		],
 		"description": "If conditional"
 	},
@@ -132,8 +153,8 @@
 		"prefix": "elsif",
 		"body": [
 			"elsif ${1:condition} {",
-				"\t${2:block};",
-				"} $0"
+			"\t${2:block};",
+			"} $0"
 		],
 		"description": "Else if branch"
 	},
@@ -143,9 +164,9 @@
 		"prefix": "else",
 		"body": [
 			"else {",
-				"\t${1:block};",
-				"};",
-				"$0"
+			"\t${1:block};",
+			"};",
+			"$0"
 		],
 		"description": "Else branch"
 	},
