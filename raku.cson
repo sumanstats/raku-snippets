@@ -26,14 +26,22 @@
       'prefix': 'header',
       'body':
         """
-        #======================================================#
+        #============================================================#
         # Author: Dr Suman Khanal
         # Date creation: $CURRENT_DAY_NAME $CURRENT_MONTH_NAME_SHORT $CURRENT_DATE $CURRENT_YEAR, $CURRENT_HOUR:$CURRENT_MINUTE:$CURRENT_SECOND
         # ~: ${1:Description}
         # File: $TM_FILENAME
-        #======================================================#
+        #============================================================#
         $0
 
+        """
+
+    'Start new block':
+      'prefix': 'para',
+      'body':
+        """
+        #============================================================#
+        $1
         """
 
 
@@ -43,6 +51,14 @@
         """
         # $1
         """
+
+    'Embedded comment':
+      'prefix': 'embcom',
+      'body':
+        """
+        #`(${1:embedded comment}) $2
+        """
+
     'Multi line comment':
       'prefix': 'mlcom',
       'body':
@@ -50,6 +66,17 @@
         #`[
         $1
         ]
+        $2
+        """
+
+    'Pod comment':
+      'prefix': 'podcom',
+      'body':
+        """
+        =begin comment
+        $1
+        =end comment
+
         $2
         """
 
