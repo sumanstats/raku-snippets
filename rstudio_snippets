@@ -1,0 +1,14 @@
+snippet h1
+	# ${1:first header}
+
+snippet h2
+	## ${1:second header}
+
+snippet h3
+	### ${1:third header}
+
+snippet h4
+	#### ${1:fourth header}
+
+snippet h5
+	##### ${1:fifth header}
