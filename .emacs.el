@@ -48,7 +48,7 @@
 ;; Preserve original case when completing with dabbrev/company-dabbrev
 (setq dabbrev-case-replace nil)        ; Preserve case of original word
 (setq dabbrev-case-fold-search t)      ; Allow "wo" to match "World"
-(setq company-dabbrev-ignore-case nil)   ; Make company-dabbrev case-insensitive in search
+(setq company-dabbrev-ignore-case nil)   ; Make company-dabbrev case-sensitive in search
 
 ;; Use pandoc for exporting
 (setq markdown-command "pandoc")
