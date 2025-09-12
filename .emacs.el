@@ -10,19 +10,7 @@
 (set-frame-font "Consolas-18" nil t)
 (load-theme 'solarized-light t)
 (setq inferior-R-program-name "D:/R-4.5.1/bin/R.exe")
-(message "Configuration file loaded.")
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages '(company ess markdown-mode solarized-theme yasnippet)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+
 (setq make-backup-files nil)
 (setq create-lockfiles nil)
 (defun title-case (start end)
@@ -55,17 +43,12 @@
 (define-key company-active-map (kbd "<tab>") 'company-complete-selection)
 (define-key company-active-map (kbd "RET") 'company-complete-selection)
 (setq company-tooltip-align-annotations t)
-(custom-set-faces
- '(company-tooltip ((t (:background "#2e3440" :foreground "#d8dee9"))))
- '(company-tooltip-selection ((t (:background "#4c566a" :foreground "#eceff4" :weight bold))))
- '(company-tooltip-common ((t (:foreground "#88c0d0" :weight bold))))
- '(company-tooltip-annotation ((t (:foreground "#ebcb8b"))))
-)
-;; (add-hook 'text-mode-hook 'turn-on-visual-line-mode)
+
+
 ;; Preserve original case when completing with dabbrev/company-dabbrev
 (setq dabbrev-case-replace nil)        ; Preserve case of original word
 (setq dabbrev-case-fold-search t)      ; Allow "wo" to match "World"
-(setq company-dabbrev-ignore-case t)   ; Make company-dabbrev case-insensitive in search
+(setq company-dabbrev-ignore-case nil)   ; Make company-dabbrev case-insensitive in search
 (setq-default fill-column 80) ; Set default width to 80 characters
 ;; Use pandoc for exporting
 (setq markdown-command "pandoc")
@@ -73,3 +56,26 @@
 (prefer-coding-system 'utf-8)
 (setq coding-system-for-read 'utf-8)
 (setq coding-system-for-write 'utf-8)
+
+;; Nord-like company-mode popup
+(set-face-attribute 'company-tooltip nil
+  :background "#3b4252"          ; Nord Polar Night
+  :foreground "#d8dee9"          ; Nord Snow Storm
+  :height 1.15
+  :box '(:line-width 1 :color "#4c566a"))
+
+(set-face-attribute 'company-tooltip-selection nil
+  :background "#5e81ac"          ; Nord Aurora Blue
+  :foreground "#eceff4"
+  :weight 'bold)
+
+(set-face-attribute 'company-tooltip-common nil
+  :foreground "#88c0d0"          ; Nord Light Blue (prefix)
+  :weight 'bold)
+
+(set-face-attribute 'company-tooltip-annotation nil
+  :foreground "#81a1c1"          ; Nord Darker Blue
+  :slant 'italic
+  :height 0.9)
+
+(setq company-box-icons-alist 'company-box-icons-all-the-icons)
