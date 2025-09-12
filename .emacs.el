@@ -49,7 +49,7 @@
 (setq dabbrev-case-replace nil)        ; Preserve case of original word
 (setq dabbrev-case-fold-search t)      ; Allow "wo" to match "World"
 (setq company-dabbrev-ignore-case nil)   ; Make company-dabbrev case-insensitive in search
-(setq-default fill-column 80) ; Set default width to 80 characters
+
 ;; Use pandoc for exporting
 (setq markdown-command "pandoc")
 ;; Set the default coding system to UTF-8
@@ -78,4 +78,3 @@
   :slant 'italic
   :height 0.9)
 
-(setq company-box-icons-alist 'company-box-icons-all-the-icons)
