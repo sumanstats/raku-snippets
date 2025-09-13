@@ -46,7 +46,6 @@
   (find-file filename wildcards))
 
 (global-set-key (kbd "C-x C-f") 'find-file-in-new-tab-side-by-side)
-(global-set-key (kbd "C-x t p") 'tab-previous)
 
 
 ;; -------------------------------
