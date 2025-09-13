@@ -1,3 +1,8 @@
+;; Disable unnecessary GUI elements
+(tool-bar-mode -1)
+;; (menu-bar-mode -1)			
+
+
 ;; -------------------------------
 ;; Package setup
 ;; -------------------------------
@@ -133,5 +138,3 @@
 (set-face-attribute 'tab-bar nil
                     :background "#2e3440"  ;; very dark gray
                     :foreground "#d8dee9")
-;; Disable toolbar
-(tool-bar-mode -1)
