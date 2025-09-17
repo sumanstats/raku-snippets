@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: bmi calculator (corrected)
+# key: bmi
+# --
+`(let (h w)
+   ;; Get height with validation and ensure float
+   (while (not (and (numberp h) (> h 0)))
+     (setq h (float (read-number "Height in meters: "))))
+   
+   ;; Get weight with validation and ensure float
+   (while (not (and (numberp w) (> w 0)))
+     (setq w (float (read-number "Weight in kilograms: "))))
+   
+   ;; Calculate and display
+   (let ((bmi (/ w (* h h))))
+     (format "Height: %.2f m\nWeight: %.1f kg\nBMI: %.4f" h w bmi)))`
