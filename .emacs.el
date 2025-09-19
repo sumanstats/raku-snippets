@@ -1,16 +1,17 @@
 ;; Disable unnecessary GUI elements
 (tool-bar-mode -1)
 (tab-bar-mode 1)
+(global-visual-line-mode 1)
+
 
 
 ;; -------------------------------
 ;; Package setup
 ;; -------------------------------
 (require 'package)
-(setq package-archives nil)
 ;; Add only MELPA stable
 (add-to-list 'package-archives
-             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+             '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
 ;; -------------------------------
@@ -20,7 +21,7 @@
 (global-display-line-numbers-mode t)
 (add-hook 'emacs-startup-hook 'toggle-frame-maximized)
 (set-frame-font "Consolas-18" nil t)
-(load-theme 'solarized-light t)
+(load-theme 'monokai t)
 (setq inferior-R-program-name "D:/R-4.5.1/bin/R.exe")
 (setq make-backup-files nil)
 (setq create-lockfiles nil)
@@ -38,14 +39,120 @@
       (while (re-search-forward "\\b\\w" nil t)
         (replace-match (upcase (match-string 0)) t t)))))
 
-(defun find-file-in-new-tab-side-by-side (filename &optional wildcards)
-  "Open FILENAME in a new tab, side by side with current tab."
-  (interactive
-   (find-file-read-args "Find file in new tab side by side: " t))
-  (tab-bar-new-tab)  ;; opens to the right of current tab
-  (find-file filename wildcards))
 
-(global-set-key (kbd "C-x C-f") 'find-file-in-new-tab-side-by-side)
+(require 'seq)
+(require 'cl-lib)
+
+(defvar my/tab-buffer->tabname (make-hash-table :test 'equal)
+  "Hash mapping file truename -> tab name where that file was last registered.")
+
+(defun my/register-buffer-in-current-tab (&optional buffer)
+  "Record BUFFER's file (if any) as being associated with the current tab.
+If BUFFER is nil, use `current-buffer'."
+  (let ((buf (or buffer (current-buffer)))
+        (tab (tab-bar--current-tab)))
+    (when (and (buffer-file-name buf) tab)
+      (puthash (file-truename (buffer-file-name buf))
+               (alist-get 'name tab)
+               my/tab-buffer->tabname))))
+
+;; Keep mapping up-to-date when files are opened / saved
+(add-hook 'find-file-hook #'my/register-buffer-in-current-tab)
+(add-hook 'after-save-hook #'my/register-buffer-in-current-tab)
+
+(defun my/remove-mappings-for-tabname (tabname)
+  "Remove all hash entries that point to TABNAME."
+  (maphash (lambda (k v) (when (string= v tabname) (remhash k my/tab-buffer->tabname)))
+           my/tab-buffer->tabname))
+
+;; When a tab is closed, remove mappings that pointed to that tab.
+(advice-add 'tab-bar-close-tab :around
+            (lambda (orig &rest args)
+              (let ((closed-name (alist-get 'name (tab-bar--current-tab))))
+                (apply orig args)
+                (my/remove-mappings-for-tabname closed-name))))
+
+;; If a tab is renamed, update our mappings.
+(advice-add 'tab-bar-rename-tab :around
+            (lambda (orig &rest args)
+              (let ((old-name (alist-get 'name (tab-bar--current-tab))))
+                (apply orig args)
+                (let ((new-name (alist-get 'name (tab-bar--current-tab))))
+                  (maphash (lambda (k v)
+                             (when (string= v old-name)
+                               (puthash k new-name my/tab-buffer->tabname)))
+                           my/tab-buffer->tabname)))))
+
+;; Remove mapping when buffer is killed
+(add-hook 'kill-buffer-hook
+          (lambda ()
+            (when buffer-file-name
+              (remhash (file-truename buffer-file-name) my/tab-buffer->tabname))))
+
+;;;###autoload
+(defun my-find-file-in-new-tab (filename &optional wildcards)
+  "Open FILENAME in a new tab to the right, or jump to the tab recorded for it.
+
+Fast path: if we have a recorded tab name for FILENAME, jump to that tab (no flicker).
+Fallback: scan tabs (temporarily selecting them) to find a tab that shows the buffer.
+Interactive uses `nil` for the require-match argument so new files can be created."
+  (interactive (find-file-read-args "Find file in new tab: " nil))
+  (cl-block nil
+    (let* ((truename (and filename (file-truename filename)))
+           (tabname  (and truename (gethash truename my/tab-buffer->tabname)))
+           (existing-buffer (and truename (find-buffer-visiting truename)))
+           (tabs (tab-bar-tabs)))
+      ;; Fast-path: hash hit -> find tab index by name (cheap)
+      (when tabname
+        (let ((idx (seq-position tabs tabname
+                                 (lambda (tab name)
+                                   (string= (alist-get 'name tab) name)))))
+          (when idx
+            (tab-bar-select-tab (1+ idx))
+            (if existing-buffer
+                (switch-to-buffer existing-buffer)
+              (find-file filename wildcards))
+            (my/register-buffer-in-current-tab (current-buffer))
+            (cl-return t))))
+      ;; Fallback: scan tabs by temporarily selecting each (only if buffer exists)
+      (let* ((orig-index (alist-get 'index (tab-bar--current-tab)))
+             (n (length tabs))
+             (found nil))
+        (unwind-protect
+            (progn
+              (when existing-buffer
+                (dotimes (i n)
+                  (let ((idx (1+ i)))
+                    (tab-bar-select-tab idx)
+                    (when (get-buffer-window existing-buffer (selected-frame))
+                      (setq found idx)
+                      (cl-return)))))
+              (if found
+                  (progn
+                    (tab-bar-select-tab found)
+                    (switch-to-buffer existing-buffer)
+                    (my/register-buffer-in-current-tab existing-buffer)
+                    (cl-return t))
+                ;; not found anywhere -> open new tab and visit
+                (tab-bar-select-tab orig-index)
+                (tab-bar-new-tab)
+                (delete-other-windows)
+                (find-file filename wildcards)
+                (my/register-buffer-in-current-tab (current-buffer))
+                (cl-return t)))
+          ;; Restore original tab if needed on exit / error
+          (when (and orig-index
+                     (not (eq (alist-get 'index (tab-bar--current-tab)) orig-index)))
+            (tab-bar-select-tab orig-index)))))))
+
+;; Rebind if you like:
+(global-set-key (kbd "C-x C-f") #'my-find-file-in-new-tab)
+
+
+
+
+
+
 
 
 ;; -------------------------------
@@ -54,11 +161,14 @@
 (prefer-coding-system 'utf-8)
 (setq coding-system-for-read 'utf-8)
 (setq coding-system-for-write 'utf-8)
-(setq markdown-command "pandoc")
 
 ;; -------------------------------
 ;; Company + Yasnippet setup
 ;; -------------------------------
+
+
+;; Enable modes
+(yas-global-mode 1)
 (require 'company)
 (require 'yasnippet)
 (require 'company-yasnippet)
@@ -66,12 +176,7 @@
 ;; Enable modes
 (yas-global-mode 1)
 (global-company-mode 1)
-
-;; Basic Company settings
-(setq company-idle-delay 0.1)
-(setq company-minimum-prefix-length 2)
-(setq company-tooltip-align-annotations t)
-(setq company-selection-wrap-around t)
+(yas-reload-all)
 
 ;; *** CRITICAL MODIFICATION: Disable company during snippet expansion ***
 (defun yas-in-snippet-field-p ()
@@ -100,12 +205,14 @@
             nil))
 
 (add-hook 'yas-after-exit-snippet-hook
-          (lambda () 
+          (lambda ()
             (setq-local company-idle-delay 0.1)
-            ;; Force company to be available again
-            (run-with-idle-timer 0.1 nil 'company-idle-begin)))
-
-
+            ;; Correct: invoke company-mode refresh safely
+            (run-with-idle-timer
+             0.1 nil
+             (lambda ()
+               (when (bound-and-true-p company-mode)
+                 (company-auto-begin))))))
 ;; CRITICAL: Configure backends to show both dabbrev AND yasnippet
 (setq company-backends
       '((company-dabbrev           ; Previously typed words (all buffers)
@@ -232,3 +339,20 @@ Triggers after 2 characters are typed."
 
 
 ;; ====================================
+
+
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(cobalt company-statistics ess markdown-mode monokai-theme
+	    solarized-theme yasnippet)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
