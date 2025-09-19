@@ -348,3 +348,6 @@ Interactive uses `nil` for the require-match argument so new files can be create
       (set-window-buffer (next-window) b2))))
 
 (global-set-key (kbd "C-x |") 'toggle-window-split)
+
+(require 'anzu)
+(global-anzu-mode +1)
