@@ -162,77 +162,120 @@ Interactive uses `nil` for the require-match argument so new files can be create
 (setq coding-system-for-read 'utf-8)
 (setq coding-system-for-write 'utf-8)
 
-;; -------------------------------
-;; Company + Yasnippet setup
-;; -------------------------------
 
 
-;; Enable modes
-(yas-global-mode 1)
+
+;; -------------------------------
+;; Company + Yasnippet + Frequent Words Setup (corrected)
+;; -------------------------------
+;; -------------------------------
+;; Company + Yasnippet + Frequent Words Setup
+;; -------------------------------
+
 (require 'company)
 (require 'yasnippet)
-(require 'company-yasnippet)
+(require 'cl-lib)
 
+;; -------------------------------
 ;; Enable modes
+;; -------------------------------
 (yas-global-mode 1)
 (global-company-mode 1)
 (yas-reload-all)
 
+;; -------------------------------
+;; Suspend company popups during snippet fields (robust + efficient)
+;; -------------------------------
+(defun my/company-suspend-in-yas-field ()
+  "Temporarily suspend company popup when in active yasnippet field."
+  (setq-local company-idle-delay
+              (if (and (boundp 'yas--active-field-overlay)
+                       yas--active-field-overlay
+                       (overlay-buffer yas--active-field-overlay))
+                  nil
+                0.1)))
 
-;;; Disable company while yasnippet fields are active (robust + efficient)
+(add-hook 'post-command-hook #'my/company-suspend-in-yas-field)
 
-(defvar-local my/company-disable-count 0
-  "Counter of nested yasnippet expansions in this buffer.
-When > 0, Company will be disabled in this buffer.")
+;; -------------------------------
+;; Company backends
+;; -------------------------------
+(defvar my-frequent-words
+  '("Braun's JJ" "heterogeneously" "enhancing" "irregular" "SUVmax"
+    "thickness" "blood loss" "duration" "high colored urine" "clay colored stool"
+    "optimization" "diagnostic workup" "gall bladder" "pancreas" "lymph nodes" "weight loss")
+  "List of frequently used words for autocompletion.")
 
-(defvar-local my/company-was-active nil
-  "Whether company-mode was active before the first snippet expansion in this buffer.")
+(defun company-my-frequent-words (command &optional arg &rest ignored)
+  "Company backend for frequent words. Trigger after 2 characters."
+  (cl-case command
+    (prefix (and (>= (length (company-grab-word)) 2)
+                 (company-grab-word)))
+    (candidates
+     (cl-remove-if-not (lambda (w) (string-prefix-p arg w)) my-frequent-words))
+    (annotation (lambda (w) " [freq]"))
+    (ignore-case t)))
 
-(defun my/disable-company-for-yas ()
-  "Disable company-mode (buffer-local) when a yasnippet expansion begins.
-Handles nested expansions via `my/company-disable-count`."
-  (when (fboundp 'company-mode)
-    (setq my/company-disable-count (1+ my/company-disable-count))
-    (when (= my/company-disable-count 1)
-      ;; first nested expansion: record and disable
-      (setq my/company-was-active (bound-and-true-p company-mode))
-      (when my/company-was-active
-        (when (fboundp 'company-cancel) (company-cancel))
-        ;; disable company-mode for this buffer
-        (company-mode -1)))))
+;; Annotate frequent words in popup
+(defface company-frequent-words
+  '((t :foreground "#a3be8c" :weight bold))
+  "Face for frequent words in Company popup.")
 
-(defun my/restore-company-after-yas ()
-  "Restore company-mode when the outermost yasnippet expansion ends."
-  (when (fboundp 'company-mode)
-    (when (> my/company-disable-count 0)
-      (setq my/company-disable-count (1- my/company-disable-count)))
-    (when (and (= my/company-disable-count 0)
-               my/company-was-active)
-      ;; restore company-mode and trigger auto-begin safely
-      (setq my/company-was-active nil)
-      (company-mode 1)
-      (run-with-idle-timer
-       0.12 nil
-       (lambda ()
-         (when (and (bound-and-true-p company-mode)
-                    (fboundp 'company-auto-begin))
-           (company-auto-begin)))))))
+(defun company-my-frequent-words-annotate (candidate)
+  "Add annotation and face to frequent words."
+  (propertize " [freq]" 'face 'company-frequent-words))
 
-;; Hook these into yasnippet lifecycle
-(when (boundp 'yas-before-expand-snippet-hook)
-  (add-hook 'yas-before-expand-snippet-hook #'my/disable-company-for-yas))
+(advice-add 'company-my-frequent-words :around
+            (lambda (orig-fun &rest args)
+              (let ((res (apply orig-fun args)))
+                (if (eq (car args) 'annotation)
+                    (company-my-frequent-words-annotate res)
+                  res))))
 
-(when (boundp 'yas-after-exit-snippet-hook)
-  (add-hook 'yas-after-exit-snippet-hook #'my/restore-company-after-yas))
+;; Add/remove frequent words
+(defun add-current-word-to-frequent-words ()
+  "Add word at point to frequent words list."
+  (interactive)
+  (let ((word (thing-at-point 'word t)))
+    (when (and word (not (member word my-frequent-words)))
+      (push word my-frequent-words)
+      (message "Added '%s' to frequent words" word))))
 
+(defun remove-word-from-frequent-words (word)
+  "Remove WORD from frequent words list."
+  (interactive
+   (list (completing-read "Remove word: " my-frequent-words)))
+  (setq my-frequent-words (delete word my-frequent-words))
+  (message "Removed '%s' from frequent words" word))
 
+(global-set-key (kbd "C-c +") 'add-current-word-to-frequent-words)
+(global-set-key (kbd "C-c -") 'remove-word-from-frequent-words)
 
-;; CRITICAL: Configure backends to show both dabbrev AND yasnippet
+;; Configure company backends
 (setq company-backends
-      '((company-dabbrev           ; Previously typed words (all buffers)
-         company-yasnippet         ; Snippet keys
-         company-capf              ; Language server completions
-         company-files)))          ; File names
+      '((company-my-frequent-words
+         company-dabbrev
+         company-yasnippet
+         company-capf
+         company-files)))
+
+;; Sort completions
+(setq company-transformers
+      '(company-sort-by-occurrence
+        company-sort-prefer-same-case-prefix))
+
+;; Keybindings for company
+(define-key company-active-map (kbd "TAB") 'company-complete-selection)
+(define-key company-active-map (kbd "<tab>") 'company-complete-selection)
+(define-key company-active-map (kbd "RET") 'company-complete-selection)
+
+;; -------------------------------
+;; Markdown snippets
+;; -------------------------------
+
+(add-to-list 'load-path "C:/Users/suman/") ; directory containing markdown-snippets.el
+(require 'markdown-snippets)
+
 
 ;; Configure dabbrev to collect words properly
 (setq company-dabbrev-ignore-case nil)      ; Case-sensitive matching
@@ -251,10 +294,6 @@ Handles nested expansions via `my/company-disable-count`."
 (set-face-attribute 'company-tooltip-annotation nil
   :foreground "#81a1c1" :slant 'italic)
 
-;; Keybindings
-(define-key company-active-map (kbd "TAB") 'company-complete-selection)
-(define-key company-active-map (kbd "<tab>") 'company-complete-selection)
-(define-key company-active-map (kbd "RET") 'company-complete-selection)
 
 ;; Cutomising tab
 ;; Active tab
@@ -267,89 +306,7 @@ Handles nested expansions via `my/company-disable-count`."
 (set-face-attribute 'tab-bar nil
                     :background "#2e3440"  ;; very dark gray
                     :foreground "#d8dee9")
-;; ---------------------------------------------------
-;; Load markdown snippets
-;; load markdown-snippets.el as Lisp, not as a snippet file
-;; ---------------------------------------------------
-(add-to-list 'load-path (file-name-directory (or load-file-name buffer-file-name)))
-(require 'markdown-snippets)
 
-
-
-;; -------------------------------
-;; Frequent Words Completion
-;; -------------------------------
-(defvar my-frequent-words
-  '("Braun's JJ" "heterogeneously" "enhancing" "irregular" "SUVmax"
-    "thickness" "blood loss" "duration" "high colored urine" "clay colored stool" "optimization" "diagnostic workup" "gall bladder" "pancreas" "lymph nodes" "weight loss")
-  "List of frequently used words for autocompletion.")
-
-(defun company-my-frequent-words (command &optional arg &rest ignored)
-  "Company backend for frequent words.
-Triggers after 2 characters are typed."
-  (interactive (list 'interactive))
-  (cl-case command
-    (prefix (and (>= (length (company-grab-word)) 2)
-                 (company-grab-word)))
-    (candidates
-     (cl-remove-if-not
-      (lambda (word) (string-prefix-p arg word))
-      my-frequent-words))
-    (ignore-case t)
-    (annotation (lambda (word) " [freq]"))))
-
-;; Custom face for frequent words
-(defface company-frequent-words
-  '((t :foreground "#a3be8c" :weight bold))
-  "Face for frequent words in Company popup.")
-
-;; Apply the face to frequent words
-(defun company-my-frequent-words-annotate (candidate)
-  "Add annotation and face to frequent words."
-  (propertize " [freq]" 'face 'company-frequent-words))
-
-(advice-add 'company-my-frequent-words :around
-            (lambda (orig-fun &rest args)
-              (let ((result (apply orig-fun args)))
-                (if (eq (car args) 'annotation)
-                    (company-my-frequent-words-annotate result)
-                  result))))
-
-;; Add current word to frequent words list
-(defun add-current-word-to-frequent-words ()
-  "Add word at point to frequent words list."
-  (interactive)
-  (let ((word (thing-at-point 'word)))
-    (when word
-      (setq word (downcase word))
-      (unless (member word my-frequent-words)
-        (push word my-frequent-words)
-        (message "Added '%s' to frequent words" word)))))
-
-;; Remove word from frequent words list
-(defun remove-word-from-frequent-words (word)
-  "Remove WORD from frequent words list."
-  (interactive
-   (list (completing-read "Remove word: " my-frequent-words)))
-  (setq my-frequent-words (delete word my-frequent-words))
-  (message "Removed '%s' from frequent words" word))
-
-;; Update company backends
-(setq company-backends
-      '((company-my-frequent-words
-         company-dabbrev
-         company-yasnippet
-         company-capf
-         company-files)))
-
-;; Configure trigger behavior
-(setq company-transformers
-      '(company-sort-by-occurrence
-        company-sort-prefer-same-case-prefix))
-
-;; Keybindings
-(global-set-key (kbd "C-c +") 'add-current-word-to-frequent-words)
-(global-set-key (kbd "C-c -") 'remove-word-from-frequent-words)
 
 
 ;; ====================================
@@ -370,3 +327,24 @@ Triggers after 2 characters are typed."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+
+(defun toggle-window-split ()
+  "Toggle between horizontal and vertical split for two windows."
+  (interactive)
+  (when (= (count-windows) 2)
+    (let* ((w1 (selected-window))
+           (w2 (next-window))
+           (b1 (window-buffer w1))
+           (b2 (window-buffer w2))
+           (edges1 (window-edges w1))
+           (edges2 (window-edges w2))
+           (split-vertically-p (< (cadr edges1) (cadr edges2))))
+      (delete-other-windows)
+      (if split-vertically-p
+          (split-window-right)
+        (split-window-below))
+      (set-window-buffer (selected-window) b1)
+      (set-window-buffer (next-window) b2))))
+
+(global-set-key (kbd "C-x |") 'toggle-window-split)
