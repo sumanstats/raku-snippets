@@ -178,41 +178,55 @@ Interactive uses `nil` for the require-match argument so new files can be create
 (global-company-mode 1)
 (yas-reload-all)
 
-;; *** CRITICAL MODIFICATION: Disable company during snippet expansion ***
-(defun yas-in-snippet-field-p ()
-  "Check if cursor is currently in a yasnippet field."
-  (and (boundp 'yas--active-field-overlay)
-       yas--active-field-overlay
-       (overlay-buffer yas--active-field-overlay)
-       (>= (point) (overlay-start yas--active-field-overlay))
-       (<= (point) (overlay-end yas--active-field-overlay))))
 
-(defun check-snippet-field-and-toggle-company ()
-  "Check if we're in a snippet field and toggle company accordingly."
-  (if (yas-in-snippet-field-p)
-      (progn
-        (setq-local company-idle-delay nil)
-        (when company-pseudo-tooltip-overlay
-          (company-cancel)))  ; Cancel any active company popup
-    (setq-local company-idle-delay 0.1)))
+;;; Disable company while yasnippet fields are active (robust + efficient)
 
-(add-hook 'post-command-hook 'check-snippet-field-and-toggle-company)
+(defvar-local my/company-disable-count 0
+  "Counter of nested yasnippet expansions in this buffer.
+When > 0, Company will be disabled in this buffer.")
 
-;; Additional hooks for more reliable state management
-(add-hook 'yas-before-expand-snippet-hook
-          (lambda () 
-            ;; Don't disable immediately, let the field detection handle it
-            nil))
+(defvar-local my/company-was-active nil
+  "Whether company-mode was active before the first snippet expansion in this buffer.")
 
-(add-hook 'yas-after-exit-snippet-hook
-          (lambda ()
-            (setq-local company-idle-delay 0.1)
-            ;; Correct: invoke company-mode refresh safely
-            (run-with-idle-timer
-             0.1 nil
-             (lambda ()
-               (when (bound-and-true-p company-mode)
-                 (company-auto-begin))))))
+(defun my/disable-company-for-yas ()
+  "Disable company-mode (buffer-local) when a yasnippet expansion begins.
+Handles nested expansions via `my/company-disable-count`."
+  (when (fboundp 'company-mode)
+    (setq my/company-disable-count (1+ my/company-disable-count))
+    (when (= my/company-disable-count 1)
+      ;; first nested expansion: record and disable
+      (setq my/company-was-active (bound-and-true-p company-mode))
+      (when my/company-was-active
+        (when (fboundp 'company-cancel) (company-cancel))
+        ;; disable company-mode for this buffer
+        (company-mode -1)))))
+
+(defun my/restore-company-after-yas ()
+  "Restore company-mode when the outermost yasnippet expansion ends."
+  (when (fboundp 'company-mode)
+    (when (> my/company-disable-count 0)
+      (setq my/company-disable-count (1- my/company-disable-count)))
+    (when (and (= my/company-disable-count 0)
+               my/company-was-active)
+      ;; restore company-mode and trigger auto-begin safely
+      (setq my/company-was-active nil)
+      (company-mode 1)
+      (run-with-idle-timer
+       0.12 nil
+       (lambda ()
+         (when (and (bound-and-true-p company-mode)
+                    (fboundp 'company-auto-begin))
+           (company-auto-begin)))))))
+
+;; Hook these into yasnippet lifecycle
+(when (boundp 'yas-before-expand-snippet-hook)
+  (add-hook 'yas-before-expand-snippet-hook #'my/disable-company-for-yas))
+
+(when (boundp 'yas-after-exit-snippet-hook)
+  (add-hook 'yas-after-exit-snippet-hook #'my/restore-company-after-yas))
+
+
+
 ;; CRITICAL: Configure backends to show both dabbrev AND yasnippet
 (setq company-backends
       '((company-dabbrev           ; Previously typed words (all buffers)
