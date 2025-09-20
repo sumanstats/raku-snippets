@@ -363,3 +363,5 @@ Interactive uses `nil` for the require-match argument so new files can be create
 
 (require 'anzu)
 (global-anzu-mode +1)
+(move-text-default-bindings)
+
