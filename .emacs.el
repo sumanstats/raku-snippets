@@ -183,6 +183,10 @@ Interactive uses `nil` for the require-match argument so new files can be create
 (global-company-mode 1)
 (yas-reload-all)
 
+
+(setq company-minimum-prefix-length 2
+      company-idle-delay 0.1)
+
 ;; -------------------------------
 ;; Suspend company popups during snippet fields (robust + efficient)
 ;; -------------------------------
@@ -202,14 +206,14 @@ Interactive uses `nil` for the require-match argument so new files can be create
 ;; -------------------------------
 (defvar my-frequent-words
   '("Braun's JJ" "heterogeneously" "enhancing" "irregular" "SUVmax"
-    "thickness" "blood loss" "duration" "high colored urine" "clay colored stool"
-    "optimization" "diagnostic workup" "gall bladder" "pancreas" "lymph nodes" "weight loss")
+    "thickness" "blood loss" "duration" "high colored urine" "clay colored stool" "chloramphenicol" "tigecycline" "doxycycline" "teicoplanin" "vancomycin" "colistin" "levofloxacin"
+    "optimization" "diagnostic workup" "gall bladder" "pancreas" "lymph nodes" "weight loss" "supportive care" "pigtail" "tolerating" "hepatocellular carcinoma" "idiopathic thrombocytopenic purpura" "mycophenolate mofetil")
   "List of frequently used words for autocompletion.")
 
 (defun company-my-frequent-words (command &optional arg &rest ignored)
-  "Company backend for frequent words. Trigger after 2 characters."
+  "Company backend for frequent words. Trigger after 3 characters."
   (cl-case command
-    (prefix (and (>= (length (company-grab-word)) 2)
+    (prefix (and (>= (length (company-grab-word)) 3)
                  (company-grab-word)))
     (candidates
      (cl-remove-if-not (lambda (w) (string-prefix-p arg w)) my-frequent-words))
@@ -253,9 +257,9 @@ Interactive uses `nil` for the require-match argument so new files can be create
 
 ;; Configure company backends
 (setq company-backends
-      '((company-my-frequent-words
+      '((company-yasnippet
          company-dabbrev
-         company-yasnippet
+         company-my-frequent-words
          company-capf
          company-files)))
 
@@ -319,8 +323,8 @@ Interactive uses `nil` for the require-match argument so new files can be create
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(cobalt company-statistics ess markdown-mode monokai-theme
-	    solarized-theme yasnippet)))
+   '(anzu cobalt company-statistics ess markdown-mode monokai-theme
+	  smartparens solarized-theme yasnippet)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -349,5 +353,7 @@ Interactive uses `nil` for the require-match argument so new files can be create
 
 (global-set-key (kbd "C-x |") 'toggle-window-split)
 
+
 (require 'anzu)
 (global-anzu-mode +1)
+
