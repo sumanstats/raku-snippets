@@ -27,6 +27,13 @@
 (setq create-lockfiles nil)
 
 ;; -------------------------------
+;; Keep auto-save, but send files to the system temp directory (recommended, so recovery still works, but don't clutter
+;;--------------------------------
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
+
+
+;; -------------------------------
 ;; Utility functions
 ;; -------------------------------
 (defun title-case (start end)
@@ -356,4 +363,3 @@ Interactive uses `nil` for the require-match argument so new files can be create
 
 (require 'anzu)
 (global-anzu-mode +1)
-
