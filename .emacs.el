@@ -2,7 +2,18 @@
 (tool-bar-mode -1)
 (tab-bar-mode 1)
 (global-visual-line-mode 1)
+;; 1)
+(setq inhibit-startup-screen t)
 
+;; 2)
+(delete-selection-mode t)
+
+;; 3)
+(show-paren-mode 1)
+
+
+;; 5)
+(setq use-short-answers t)
 
 
 ;; -------------------------------
@@ -331,7 +342,7 @@ Interactive uses `nil` for the require-match argument so new files can be create
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    '(anzu cobalt company-statistics ess markdown-mode monokai-theme
-	  smartparens solarized-theme yasnippet)))
+	  move-text neotree smartparens solarized-theme yasnippet)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -363,5 +374,7 @@ Interactive uses `nil` for the require-match argument so new files can be create
 
 (require 'anzu)
 (global-anzu-mode +1)
+
 (move-text-default-bindings)
+
 
