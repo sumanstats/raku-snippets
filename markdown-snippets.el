@@ -24,21 +24,54 @@
     ("dopp" "echogenicity $1, portal flow $2, hepatic vein flow $3\nhepatic artery flow: PSV $4, RI $5, acceleration time $6\nIVC $7, effusion $8, collection $9, miscellaneous $10 $0" "Recipient doppler")
     ("hba" "HbA1c $1 $0" "Glycated hemoglobin")
     ("bmi"
- "`(let (h w)
-     ;; Read height in cm and convert to meters
-     (while (not (and (numberp h) (> h 0)))
-       (setq h (/ (float (read-number \"Height in cm: \")) 100)))
-     ;; Read weight in kg
-     (while (not (and (numberp w) (> w 0)))
-       (setq w (float (read-number \"Weight in kilograms: \"))))
-     ;; Calculate BMI
-     (let ((bmi (/ w (* h h))))
-       (format \"Height: %.0f cm, Weight: %.0f kg\nBMI: %.2f\" (* h 100) w bmi)))`"
- "BMI calculator")
-
+      "`(let (h w)
+          ;; Read height in cm and convert to meters
+          (while (not (and (numberp h) (> h 0)))
+            (setq h (/ (float (read-number \"Height in cm: \")) 100)))
+          ;; Read weight in kg
+          (while (not (and (numberp w) (> w 0)))
+            (setq w (float (read-number \"Weight in kilograms: \"))))
+          ;; Calculate BMI
+          (let ((bmi (/ w (* h h))))
+            (format \"Height: %.0f cm, Weight: %.0f kg\nBMI: %.2f\" (* h 100) w bmi)))`"
+          "BMI calculator")
+    ("nri"
+        "`(let (a w u h)
+            ;; read albumin in g/L
+            (while (not (and (numberp a) (> a 0)))
+              (setq a (float (read-number \"Serum albumin (g/L): \"))))
+            ;; present weight (kg)
+            (while (not (and (numberp w) (> w 0)))
+              (setq w (float (read-number \"Present weight (kg): \"))))
+            ;; usual weight (kg)
+            (while (not (and (numberp u) (> u 0)))
+              (setq u (float (read-number \"Usual weight (kg): \"))))
+            ;; height in cm -> convert to meters
+            (while (not (and (numberp h) (> h 0)))
+              (setq h (/ (float (read-number \"Height (cm): \")) 100.0)))
+            ;; calculations
+            (let* ((bmi (/ w (* h h)))                   
+                   (nri (+ (* 1.519 a) (* 41.7 (/ w u)))))
+              ;; determine BMI risk category
+              (let ((bmi-category
+                     (cond
+                      ((< bmi 18.5) \"Underweight\")
+                      ((< bmi 23.0) \"Normal Weight\")
+                      ((< bmi 25.0) \"Increased Risk/Overweight\")
+                      (t \"High Risk/Obese\"))))
+                ;; determine NRI risk category
+                (let ((nri-category
+                       (cond
+                        ((> nri 100.0) \"No\")
+                        ((>= nri 97.6) \"Mild\")
+                        ((>= nri 83.5) \"Moderate\")
+                        (t \"Severe\"))))
+                  (format \"Present weight: %.1f kg\nUsual weight: %.1f kg\nHeight: %.0f cm\nAlbumin: %.0f g/L\n\nBMI: %.2f kg/m2 (%s)\nNRI: %.2f (%s risk of malnutrition)\"
+                          w u (* h 100) a bmi bmi-category nri nri-category)))))`" 
+                          "NRI + BMI calculator with risk classifications")
+    
    ))
 
 (provide 'markdown-snippets)
-
 
 
