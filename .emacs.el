@@ -297,6 +297,7 @@ Interactive uses `nil` for the require-match argument so new files can be create
 
 (add-to-list 'load-path "C:/Users/suman/") ; directory containing markdown-snippets.el
 (require 'markdown-snippets)
+;; (require 'new-snippets) ; keep elisp files with new snippets here 
 
 
 ;; Configure dabbrev to collect words properly
