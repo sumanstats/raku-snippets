@@ -183,11 +183,6 @@ Interactive uses `nil` for the require-match argument so new files can be create
 (setq markdown-command "pandoc -f gfm -t html5 --standalone")
 
 
-
-
-;; -------------------------------
-;; Company + Yasnippet + Frequent Words Setup (corrected)
-;; -------------------------------
 ;; -------------------------------
 ;; Company + Yasnippet + Frequent Words Setup
 ;; -------------------------------
