@@ -24,54 +24,138 @@
     ("dopp" "echogenicity $1, portal flow $2, hepatic vein flow $3\nhepatic artery flow: PSV $4, RI $5, acceleration time $6\nIVC $7, effusion $8, collection $9, miscellaneous $10 $0" "Recipient doppler")
     ("hba" "HbA1c $1 $0" "Glycated hemoglobin")
     ("bmi"
-      "`(let (h w)
-          ;; Read height in cm and convert to meters
-          (while (not (and (numberp h) (> h 0)))
-            (setq h (/ (float (read-number \"Height in cm: \")) 100)))
-          ;; Read weight in kg
-          (while (not (and (numberp w) (> w 0)))
-            (setq w (float (read-number \"Weight in kilograms: \"))))
-          ;; Calculate BMI
-          (let ((bmi (/ w (* h h))))
-            (format \"Height: %.0f cm, Weight: %.1f kg\nBMI: %.2f\" (* h 100) w bmi)))`"
-          "BMI calculator")
-    ("nri"
-        "`(let (a w u h)
-            ;; read albumin in g/L
-            (while (not (and (numberp a) (> a 0)))
-              (setq a (float (read-number \"Serum albumin (g/L): \"))))
-            ;; present weight (kg)
-            (while (not (and (numberp w) (> w 0)))
-              (setq w (float (read-number \"Present weight (kg): \"))))
-            ;; usual weight (kg)
-            (while (not (and (numberp u) (> u 0)))
-              (setq u (float (read-number \"Usual weight (kg): \"))))
-            ;; height in cm -> convert to meters
-            (while (not (and (numberp h) (> h 0)))
-              (setq h (/ (float (read-number \"Height (cm): \")) 100.0)))
-            ;; calculations
-            (let* ((bmi (/ w (* h h)))                   
-                   (nri (+ (* 1.519 a) (* 41.7 (/ w u)))))
-              ;; determine BMI risk category
-              (let ((bmi-category
-                     (cond
-                      ((< bmi 18.5) \"Underweight\")
-                      ((< bmi 23.0) \"Normal Weight\")
-                      ((< bmi 25.0) \"Increased Risk/Overweight\")
-                      (t \"High Risk/Obese\"))))
-                ;; determine NRI risk category
-                (let ((nri-category
-                       (cond
-                        ((> nri 100.0) \"No\")
-                        ((>= nri 97.6) \"Mild\")
-                        ((>= nri 83.5) \"Moderate\")
-                        (t \"Severe\"))))
-                  (format \"Present weight: %.1f kg\nUsual weight: %.1f kg\nHeight: %.0f cm\nAlbumin: %.0f g/L\n\nBMI: %.2f kg/m2 (%s)\nNRI: %.2f (%s risk of malnutrition)\"
-                          w u (* h 100) a bmi bmi-category nri nri-category)))))`" 
-                          "NRI + BMI calculator with risk classifications")
+     "`(let (w height-cm h)
+         ;; Get valid weight (kg): 3..150
+         (while (not (and (numberp w) (>= w 3) (<= w 150)))
+           (condition-case nil
+               (progn
+                 (setq w (float (read-number \"Present weight (kg): \")))
+                 (unless (and (>= w 3) (<= w 150))
+                   (message \"Weight must be between 3 and 150 kg\")
+                   (setq w nil)))
+             (wrong-type-argument
+              (message \"Weight must be a number\")
+              (setq w nil))))
+
+         ;; Get valid height in cm: > 30
+         (while (not (and (numberp height-cm) (> height-cm 30)))
+           (condition-case nil
+               (progn
+                 (setq height-cm (float (read-number \"Height (cm): \")))
+                 (unless (> height-cm 30)
+                   (message \"Height must be greater than 30 cm\")
+                   (setq height-cm nil)))
+             (wrong-type-argument
+              (message \"Height must be a number\")
+              (setq height-cm nil))))
+
+         ;; convert to metres for BMI calculation
+         (setq h (/ height-cm 100.0))
+
+         ;; calculate BMI and BSA
+         (let* ((bmi (/ w (* h h)))
+                (bsa (sqrt (/ (* height-cm w) 3600.0)))
+                (bmi-category
+                 (cond ((< bmi 18.5) \"Underweight\")
+                       ((< bmi 23.0) \"Normal Weight\")
+                       ((< bmi 25.0) \"Increased Risk/Overweight\")
+                       (t \"High Risk/Obese\"))))
+           (format \"Present weight: %.1f kg\nHeight: %.0f cm\n\nBMI: %.2f kg/m² (%s)\nBSA (Mosteller): %.2f m²\"
+                   w height-cm bmi bmi-category bsa)))`"
+     "BMI + BSA calculator with correct height validation")
+    ("slv"
+     "`(let (height weight bsa slv)
+         ;; Prompt for valid weight 3-150 kg
+         (while (not (and (numberp weight) (>= weight 3) (<= weight 150)))
+           (condition-case nil
+               (setq weight (float (read-number \"Weight (kg): \")))
+             (wrong-type-argument
+              (message \"Weight must be a number\")
+              (setq weight nil))))
+         
+         ;; Prompt for valid height >30 cm
+         (while (not (and (numberp height) (> height 30)))
+           (condition-case nil
+               (setq height (float (read-number \"Height (cm): \")))
+             (wrong-type-argument
+              (message \"Height must be a number\")
+              (setq height nil))))
+
+         ;; calculate BSA and SLV
+         (setq bsa (sqrt (/ (* height weight) 3600.0)))
+         (setq slv (- (* 1267 bsa) 794))
+
+         ;; insert formatted result
+         (format \"SLV: %.0f cc\" 
+                 slv))`"
+     "SLV calculator based on Mosteller formula")
+     ("nri"
+     "`(let (a w u h height-cm bsa)
+         ;; Albumin validation
+         (while (not (and (numberp a) (> a 0)))
+           (condition-case nil
+               (setq a (float (read-number \"Serum albumin (g/L): \")))
+             (wrong-type-argument
+              (message \"Albumin must be a number\")
+              (setq a nil))))
+         
+         ;; Present weight validation: 3–150 kg
+         (while (not (and (numberp w) (>= w 3) (<= w 150)))
+           (condition-case nil
+               (setq w (float (read-number \"Present weight (kg): \")))
+             (wrong-type-argument
+              (message \"Weight must be a number\")
+              (setq w nil)))
+           (unless (and (>= w 3) (<= w 150))
+             (message \"Weight must be between 3–150 kg\")
+             (setq w nil)))
+         
+         ;; Usual weight validation: 3–150 kg
+         (while (not (and (numberp u) (>= u 3) (<= u 150)))
+           (condition-case nil
+               (setq u (float (read-number \"Usual weight (kg): \")))
+             (wrong-type-argument
+              (message \"Usual weight must be a number\")
+              (setq u nil)))
+           (unless (and (>= u 3) (<= u 150))
+             (message \"Usual weight must be between 3–150 kg\")
+             (setq u nil)))
+
+         ;; Height validation: >30 cm
+         (while (not (and (numberp height-cm) (> height-cm 30)))
+           (condition-case nil
+               (setq height-cm (float (read-number \"Height (cm): \")))
+             (wrong-type-argument
+              (message \"Height must be a number\")
+              (setq height-cm nil)))
+           (unless (> height-cm 30)
+             (message \"Height must be greater than 30 cm\")
+             (setq height-cm nil)))
+
+         ;; convert height to meters for BMI
+         (setq h (/ height-cm 100.0))
+
+         ;; calculate BMI, NRI, BSA
+         (let* ((bmi (/ w (* h h)))
+                (nri (+ (* 1.519 a) (* 41.7 (/ w u))))
+                (bsa (sqrt (/ (* height-cm w) 3600.0))))
+           ;; BMI category
+           (let ((bmi-category
+                  (cond ((< bmi 18.5) \"Underweight\")
+                        ((< bmi 23.0) \"Normal Weight\")
+                        ((< bmi 25.0) \"Increased Risk/Overweight\")
+                        (t \"High Risk/Obese\"))))
+             ;; NRI category
+             (let ((nri-category
+                    (cond ((> nri 100.0) \"No\")
+                          ((>= nri 97.6) \"Mild\")
+                          ((>= nri 83.5) \"Moderate\")
+                          (t \"Severe\"))))
+               (format \"Present weight: %.1f kg\nUsual weight: %.1f kg\nHeight: %.0f cm\nAlbumin: %.0f g/L\n\nBSA: %.2f m²\nBMI: %.2f kg/m² (%s)\nNRI: %.2f (%s risk of malnutrition)\"
+                       w u height-cm a bsa bmi bmi-category nri nri-category)))))`"
+     "NRI + BMI + BSA calculator with validation")
+    
     
    ))
 
 (provide 'markdown-snippets)
-
-
