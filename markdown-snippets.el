@@ -33,7 +33,7 @@
             (setq w (float (read-number \"Weight in kilograms: \"))))
           ;; Calculate BMI
           (let ((bmi (/ w (* h h))))
-            (format \"Height: %.0f cm, Weight: %.0f kg\nBMI: %.2f\" (* h 100) w bmi)))`"
+            (format \"Height: %.0f cm, Weight: %.1f kg\nBMI: %.2f\" (* h 100) w bmi)))`"
           "BMI calculator")
     ("nri"
         "`(let (a w u h)
