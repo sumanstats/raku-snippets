@@ -97,20 +97,20 @@
            ;; -------- Output --------
            (concat
             ;; Raw entered values
-            \"Entered values:\\n\"
-            (format \"  Bilirubin = %.2f mg/dL\\n\" entered-bil)
-            (format \"  INR = %.2f\\n\" entered-inr)
-            (format \"  Creatinine = %.2f mg/dL\\n\" entered-cr)
-            (format \"  Sodium = %.1f mmol/L\\n\" entered-na)
-            (format \"  Albumin = %.2f g/dL\\n\" entered-alb)
-            (format \"  Dialysis = %s\\n\" (if entered-dialysis \"Yes\" \"No\"))
-            (format \"  Sex = %s\\n\\n\" (if entered-female \"Female\" \"Male\"))
+            \"Entered values:\n\"
+            (format \"  Bilirubin = %.2f mg/dL\n\" entered-bil)
+            (format \"  INR = %.2f\n\" entered-inr)
+            (format \"  Creatinine = %.2f mg/dL\n\" entered-cr)
+            (format \"  Sodium = %.1f mmol/L\n\" entered-na)
+            (format \"  Albumin = %.2f g/dL\n\" entered-alb)
+            (format \"  Dialysis = %s\n\" (if entered-dialysis \"Yes\" \"No\"))
+            (format \"  Sex = %s\n\n\" (if entered-female \"Female\" \"Male\"))
 
             ;; Scores
-            (format \"MELD = %.2f\\nMELD-Na = %.2f\\nMELD 3.0 = %.2f\\n\\n\" meld meldna meld3)
+            (format \"MELD = %.2f\nMELD-Na = %.2f\nMELD 3.0 = %.2f\n\n\" meld meldna meld3)
 
             ;; Creatinine summary line
-            (format \"Creatinine actually used: MELD/MELD-Na = %.2f, MELD 3.0 = %.2f\\n\\n\" cr-meld cr-meld3)
+            (format \"Creatinine actually used: MELD/MELD-Na = %.2f, MELD 3.0 = %.2f\n\n\" cr-meld cr-meld3)
 
             ;; Adjustment notes
             (if notes
