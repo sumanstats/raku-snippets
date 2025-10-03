@@ -200,7 +200,9 @@ Interactive uses `nil` for the require-match argument so new files can be create
 
 
 (setq company-minimum-prefix-length 2
-      company-idle-delay 0.1)
+      company-idle-delay 0.1
+      company-selection-wrap-around t)
+
 
 ;; -------------------------------
 ;; Suspend company popups during snippet fields (robust + efficient)
