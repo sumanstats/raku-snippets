@@ -224,7 +224,7 @@ Interactive uses `nil` for the require-match argument so new files can be create
 (defvar my-frequent-words
   '("Braun's JJ" "heterogeneously" "enhancing" "irregular" "SUVmax"
     "thickness" "blood loss" "duration" "high colored urine" "clay colored stool" "chloramphenicol" "tigecycline" "doxycycline" "teicoplanin" "vancomycin" "colistin" "levofloxacin"
-    "optimization" "diagnostic workup" "gall bladder" "pancreas" "lymph nodes" "weight loss" "supportive care" "pigtail" "tolerating" "hepatocellular carcinoma" "resection" "idiopathic thrombocytopenic purpura" "mycophenolate mofetil" "hemihepatectomy" "extubated and shifted to" "Pfannenstiel")
+    "optimization" "diagnostic workup" "gall bladder" "pancreas" "lymph nodes" "weight loss" "supportive care" "splenomegaly" "pigtail" "tolerating" "hepatocellular carcinoma" "resection" "idiopathic thrombocytopenic purpura" "mycophenolate mofetil" "hemihepatectomy" "extubated and shifted to" "Pfannenstiel")
   "List of frequently used words for autocompletion.")
 
 (defun company-my-frequent-words (command &optional arg &rest ignored)
