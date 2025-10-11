@@ -10,7 +10,7 @@
 
 ;; 3)
 (show-paren-mode 1)
-(smartparens-global-mode 1)
+(electric-pair-mode 1)
 
 
 ;; 5)
@@ -32,6 +32,8 @@
 (setq default-directory "C:/Users/suman")
 (global-display-line-numbers-mode t)
 (add-hook 'emacs-startup-hook 'toggle-frame-maximized)
+;; (set-frame-font "JetBrains Mono-18" nil t)
+;; (load-theme 'sanityinc-tomorrow-blue t)
 (set-frame-font "Iosevka-18" nil t)
 (load-theme 'sanityinc-tomorrow-blue t)
 (setq inferior-R-program-name "D:/R-4.5.1/bin/R.exe")
@@ -224,7 +226,7 @@ Interactive uses `nil` for the require-match argument so new files can be create
 ;; -------------------------------
 (defvar my-frequent-words
   '("Braun's JJ" "heterogeneously" "enhancing" "irregular" "SUVmax"
-    "thickness" "blood loss" "duration" "high colored urine" "clay colored stool" "chloramphenicol" "tigecycline" "doxycycline" "teicoplanin" "vancomycin" "colistin" "levofloxacin" "cholelithiasis" "choledocholithiasis" "optimization" "diagnostic workup" "gall bladder" "pancreas" "lymph nodes" "weight loss" "supportive care" "pigtail" "tolerating" "hepatocellular carcinoma" "resection" "idiopathic thrombocytopenic purpura" "mycophenolate mofetil" "hemihepatectomy" "extubated and shifted to" "Pfannenstiel" "adenocarcinoma")
+    "thickness" "blood loss" "duration" "high colored urine" "clay colored stool" "chloramphenicol" "tigecycline" "doxycycline" "teicoplanin" "vancomycin" "colistin" "levofloxacin" "cholelithiasis" "choledocholithiasis" "optimization" "diagnostic workup" "gall bladder" "pancreas" "lymph nodes" "weight loss" "supportive care" "pigtail" "tolerating" "hepatocellular carcinoma" "resection" "idiopathic thrombocytopenic purpura" "mycophenolate mofetil" "hemihepatectomy" "extubated and shifted to" "Pfannenstiel" "adenocarcinoma" "generalised" "pruritus" "fluctuating" "nonreactive" "comorbidities")
   "List of frequently used words for autocompletion.")
 
 (defun company-my-frequent-words (command &optional arg &rest ignored)
