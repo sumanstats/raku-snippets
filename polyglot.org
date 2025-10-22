@@ -1,8 +1,9 @@
 #+TITLE: Mixed R and Python Plots
-#+PROPERTY: header-args:R :results output graphics file :exports both
+#+PROPERTY: header-args:R :results output graphics file :exports results
 #+PROPERTY: header-args:python :results output graphics file :exports both
 
 *** R Plot
+
 #+BEGIN_SRC R :file rplot.png
 library(ggplot2)
 ggplot(mtcars, aes(x = wt, y = mpg)) +
@@ -10,28 +11,36 @@ ggplot(mtcars, aes(x = wt, y = mpg)) +
   labs(title = "R: MPG vs Weight")
 #+END_SRC
 
+#+CAPTION: R: MPG vs Weight
 #+RESULTS:
 [[file:rplot.png]]
 
-*** Python Plot
-#+BEGIN_SRC python :file pyplot.png
-import matplotlib.pyplot as plt
-import seaborn as sns
-import numpy as np
-import pandas as pd
-from string import ascii_letters
 
-sns.set_theme(style="white")
-rs = np.random.RandomState(33)
-d = pd.DataFrame(data=rs.normal(size=(100, 26)), columns=list(ascii_letters[26:]))
-corr = d.corr()
-mask = np.triu(np.ones_like(corr, dtype=bool))
-f, ax = plt.subplots(figsize=(11, 9))
-cmap = sns.diverging_palette(230, 20, as_cmap=True)
-sns.heatmap(corr, mask=mask, cmap=cmap, vmax=.3, center=0,
-            square=True, linewidths=.5, cbar_kws={"shrink": .5})
-plt.savefig("pyplot.png")
+
+
+
+
+
+*** Python Plot
+
+#+BEGIN_SRC python :file pyplot.png
+import seaborn as sns
+sns.set_theme(style="ticks")
+
+# Load the penguins dataset
+penguins = sns.load_dataset("penguins")
+
+# Show the joint distribution using kernel density estimation
+g = sns.jointplot(
+    data=penguins,
+    x="bill_length_mm", y="bill_depth_mm", hue="species",
+    kind="kde",
+)
 #+END_SRC
 
+#+CAPTION: Python: Penguin Bill Dimensions by Species (KDE)
 #+RESULTS:
 [[file:pyplot.png]]
+
+
+
