@@ -4,6 +4,8 @@
 (global-visual-line-mode 1)
 ;; 1)
 (setq inhibit-startup-screen t)
+(setq isearch-wrap-pause nil)  ; don't pause when wrapping
+(setq isearch-allow-scroll t) 
 
 ;; 2)
 (delete-selection-mode t)
@@ -378,5 +380,40 @@ Interactive uses `nil` for the require-match argument so new files can be create
 (global-anzu-mode +1)
 
 (move-text-default-bindings)
+
+;; -------------------------------
+;; Org-mode Babel Language Support
+;; -------------------------------
+
+;; This line tells Org-babel which programming languages to enable.
+;; The 't' means "enable" for that language.
+
+(setq org-babel-python-command "D:/miniconda3/python.exe")
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '(
+   (python . t)    ; Enable Python execution
+   (R . t)     
+   (emacs-lisp . t)
+   ))
+(setq org-html-inline-images t)
+(add-hook 'org-mode-hook 'org-display-inline-images)
+(setq org-confirm-babel-evaluate nil)
+(setq org-export-babel-evaluate t)
+
+(require 'htmlize)
+
+(use-package multiple-cursors
+  :ensure t
+  :demand t
+  :bind (("C-S-c C-S-c" . mc/edit-lines)
+         ("C-c >"       . mc/mark-next-like-this)
+         ("C-c <"       . mc/mark-previous-like-this)
+         ("C-c C->"     . mc/skip-to-next-like-this)
+         ("C-c C-<"     . mc/skip-to-previous-like-this)
+         ;; mouse
+         ("M-<mouse-1>" . mc/add-cursor-on-click))
+  :config
+  (global-unset-key (kbd "M-<down-mouse-1>")))
 
 
