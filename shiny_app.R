@@ -390,7 +390,7 @@ server <- function(input, output, session) {
           style = "font-size:1.1em;padding:10px;border-left:5px solid #27ae60;background-color:#ecf0f1;",
           p(tags$b("Nutritional Risk Index (NRI):"),
           sprintf("%.2f (%s risk of malnutrition)", res$nri, res$nri_category)),
-          p(tags$b("BMI:"), sprintf("%.2f (%s)", res$bmi, res$bmi_category)),
+          p(tags$b("BMI:"), sprintf("%.2f kg/m² (%s)", res$bmi, res$bmi_category)),
           p(tags$b("BSA (Mosteller):"), sprintf("%.2f m²", res$bsa))
         )
       })
