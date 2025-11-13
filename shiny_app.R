@@ -110,6 +110,50 @@ calculate_nri_bmi_bsa <- function(albumin_g_L, weight_kg, usual_weight_kg, heigh
 }
 
 
+
+# =======================
+#     MELD Calculator 
+# =======================
+calculate_meld <- function(bil, inr, cr, na, alb, female, dialysis) {
+  notes <- c()
+  
+  bil <- max(bil, 1.0)
+  if (bil < 1.0) notes <- c(notes, sprintf("Bilirubin %.2f → set to 1.0 for MELD", bil))
+  inr <- max(inr, 1.0)
+  if (inr < 1.0) notes <- c(notes, sprintf("INR %.2f → set to 1.0 for MELD", inr))
+  
+  if (dialysis) {
+    cr_meld <- 4.0; cr_meld3 <- 3.0
+    notes <- c(notes, "Dialysis → creatinine set to 4.0 (MELD/MELD-Na) & 3.0 (MELD 3.0)")
+  } else {
+    cr_meld <- min(max(cr, 1.0), 4.0)
+    cr_meld3 <- min(max(cr, 1.0), 3.0)
+    if (cr < 1.0) notes <- c(notes, sprintf("Creatinine %.2f → set to 1.0 (all formulas)", cr))
+    else if (cr > 4.0) notes <- c(notes, sprintf("Creatinine %.2f → truncated to 4.0 (MELD/MELD-Na) & 3.0 (MELD 3.0)", cr))
+    else if (cr > 3.0) notes <- c(notes, sprintf("Creatinine %.2f → truncated to 3.0 (MELD 3.0)", cr))
+  }
+  
+  na_adj <- min(max(na, 125.0), 137.0)
+  if (na_adj != na) notes <- c(notes, sprintf("Sodium %.1f → adjusted to %.1f (MELD-Na/MELD 3.0)", na, na_adj))
+  alb_adj <- min(max(alb, 1.5), 3.5)
+  if (alb_adj != alb) notes <- c(notes, sprintf("Albumin %.2f → capped to %.2f (MELD 3.0)", alb, alb_adj))
+  
+  meld <- (3.78 * log(bil)) + (11.2 * log(inr)) + (9.57 * log(cr_meld)) + 6.43
+  meldna <- min(max(meld + (1.32 * (137 - na_adj)) - (0.033 * meld * (137 - na_adj)), 6.0), 40.0)
+  meld3 <- min(max((if (female) 1.33 else 0) +
+                     (4.56 * log(bil)) +
+                     (0.82 * (137 - na_adj)) -
+                     (0.24 * (137 - na_adj) * log(bil)) +
+                     (9.09 * log(inr)) +
+                     (11.14 * log(cr_meld3)) +
+                     (1.85 * (3.5 - alb_adj)) -
+                     (1.83 * (3.5 - alb_adj) * log(cr_meld3)) + 6.0, 6.0), 40.0)
+  
+  list(meld = meld, meldna = meldna, meld3 = meld3,
+       cr_meld = cr_meld, cr_meld3 = cr_meld3, notes = notes)
+}
+
+
 # === UI ===
 ui <- fluidPage(
   useShinyFeedback(),
@@ -221,10 +265,28 @@ ui <- fluidPage(
           uiOutput("nri_result")
         )
       )
+    ),
+    
+    tabPanel("MELD",
+             numericInput("meld_bil", "Bilirubin (mg/dL):", NA, min = 0),
+             numericInput("meld_inr", "INR:", NA, min = 0),
+             numericInput("meld_cr", "Creatinine (mg/dL):", NA, min = 0),
+             numericInput("meld_na", "Sodium (mmol/L):", NA, min = 100, max = 170),
+             numericInput("meld_alb", "Albumin (g/dL):", NA, min = 0),
+             selectInput("meld_sex", "Sex:", c("", "Male", "Female")),
+             selectInput("meld_dialysis", "Dialysis twice or more in last week?", c("", "No", "Yes")),
+             actionButton("calc_meld", "Calculate", class = "btn-primary"),
+             hr(),
+             uiOutput("meld_result")
     )
+ 
     
   )
 )
+
+
+
+
 
 # === SERVER ===
 server <- function(input, output, session) {
@@ -397,6 +459,25 @@ server <- function(input, output, session) {
     }
   })
   
+  
+  observeEvent(input$calc_meld, {
+    req(input$meld_bil, input$meld_inr, input$meld_cr, input$meld_na, input$meld_alb)
+    dialysis <- tolower(input$meld_dialysis) %in% c("yes")
+    female <- tolower(input$meld_sex) %in% c("female")
+    res <- calculate_meld(input$meld_bil, input$meld_inr, input$meld_cr, input$meld_na, input$meld_alb, female, dialysis)
+    
+    output$meld_result <- renderUI({
+      tagList(
+        tags$b(sprintf("MELD: %.2f", res$meld)), br(),
+        tags$b(sprintf("MELD-Na: %.2f", res$meldna)), br(),
+        tags$b(sprintf("MELD 3.0: %.2f", res$meld3)), br(), br(),
+        tags$b(sprintf("Creatinine used: MELD/MELD-Na = %.2f, MELD 3.0 = %.2f", res$cr_meld, res$cr_meld3)), br(), br(),
+        if (length(res$notes) > 0) {
+          tagList(tags$b("Adjustments made:"), tags$ul(lapply(res$notes, tags$li)))
+        }
+      )
+    })
+  })
   
 }
 
