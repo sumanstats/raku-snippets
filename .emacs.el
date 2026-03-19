@@ -417,3 +417,42 @@ Interactive uses `nil` for the require-match argument so new files can be create
   (global-unset-key (kbd "M-<down-mouse-1>")))
 
 
+
+(put 'downcase-region 'disabled nil)
+
+
+;; Get file name and one folder above with keyboard shortcut 
+;; C-c u 
+(defun copy-parent-folder-and-file ()
+  "Copy 'parent-folder/filename' to clipboard."
+  (interactive)
+  (when buffer-file-name
+    (let* ((dir (file-name-directory buffer-file-name))
+           (parent (file-name-nondirectory (directory-file-name dir)))
+           (file (file-name-nondirectory buffer-file-name))
+           (result (concat parent "/" file)))
+      (kill-new result)
+      (message result))))
+
+(global-set-key (kbd "C-c u") 'copy-parent-folder-and-file)
+
+;; Refresh emacs file with init
+
+(defun reload-init-file ()
+  "Reload Emacs init file."
+  (interactive)
+  (load-file user-init-file)
+  (message "Config reloaded!"))
+
+(global-set-key (kbd "C-c f") 'reload-init-file)
+
+
+(add-hook 'markdown-mode-hook
+          (lambda ()
+            (setq-local yas-indent-line 'fixed)))
+
+;; If you use quarto-mode specifically:
+(add-hook 'quarto-mode-hook
+          (lambda ()
+            (setq-local yas-indent-line 'fixed)))
+
