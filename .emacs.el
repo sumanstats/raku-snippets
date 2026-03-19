@@ -323,10 +323,10 @@ Interactive uses `nil` for the require-match argument so new files can be create
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    '(anzu auctex color-theme-sanityinc-tomorrow ess ess-R-data-view
-	  ess-view highlight-indent-guides htmlize jupyter magit
+	  ess-view highlight-indent-guides htmlize ivy jupyter magit
 	  markdown-mode material-theme monokai-theme move-text
 	  multiple-cursors poly-R poly-org quarto-mode smartparens
-	  solarized-theme yaml yaml-mode yasnippet)))
+	  solarized-theme swiper yaml yaml-mode yasnippet)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -425,7 +425,17 @@ Interactive uses `nil` for the require-match argument so new files can be create
           (lambda ()
             (setq-local yas-indent-line 'fixed)))
 
+;; Use swiper
 
+(use-package ivy
+  :ensure t
+  :config
+  (ivy-mode 1)
+  (setq ivy-wrap t))
+
+(use-package swiper
+  :ensure t
+  :bind (("C-s" . swiper)))
 
 ;; Make C-a, C-e, backspace work 
 
