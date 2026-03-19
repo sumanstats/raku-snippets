@@ -322,7 +322,7 @@ Interactive uses `nil` for the require-match argument so new files can be create
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(anzu auctex color-theme-sanityinc-tomorrow ess ess-R-data-view
+   '(auctex color-theme-sanityinc-tomorrow ess ess-R-data-view
 	  ess-view highlight-indent-guides htmlize ivy jupyter magit
 	  markdown-mode material-theme monokai-theme move-text
 	  multiple-cursors poly-R poly-org quarto-mode smartparens
@@ -377,11 +377,6 @@ Interactive uses `nil` for the require-match argument so new files can be create
 (setq org-export-babel-evaluate t)
 
 (require 'htmlize)
-(setq isearch-wrap-pause nil)  
-(setq isearch-allow-scroll t) 
-
-(require 'anzu)
-(global-anzu-mode +1)
 
 (move-text-default-bindings)
 
@@ -435,7 +430,7 @@ Interactive uses `nil` for the require-match argument so new files can be create
 
 (use-package swiper
   :ensure t
-  :bind (("C-s" . swiper)))
+  :bind (("C-s" . swiper-isearch)))
 
 ;; Make C-a, C-e, backspace work 
 
