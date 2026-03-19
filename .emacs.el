@@ -4,8 +4,6 @@
 (global-visual-line-mode 1)
 ;; 1)
 (setq inhibit-startup-screen t)
-(setq isearch-wrap-pause nil)  ; don't pause when wrapping
-(setq isearch-allow-scroll t) 
 
 ;; 2)
 (delete-selection-mode t)
@@ -13,7 +11,6 @@
 ;; 3)
 (show-paren-mode 1)
 (electric-pair-mode 1)
-
 
 ;; 5)
 (setq use-short-answers t)
@@ -31,14 +28,12 @@
 ;; -------------------------------
 ;; Basic settings
 ;; -------------------------------
-(setq default-directory "C:/Users/suman")
+(setq default-directory "C:/Users/suman/Desktop/Audit/")
 (global-display-line-numbers-mode t)
 (add-hook 'emacs-startup-hook 'toggle-frame-maximized)
-;; (set-frame-font "JetBrains Mono-18" nil t)
-;; (load-theme 'sanityinc-tomorrow-blue t)
-(set-frame-font "Iosevka-18" nil t)
-(load-theme 'sanityinc-tomorrow-blue t)
-(setq inferior-R-program-name "D:/R-4.5.1/bin/R.exe")
+(set-frame-font "Fira Code-18" nil t)
+(load-theme 'material t)
+(setq inferior-R-program-name "D:/R-4.5.2/bin/R.exe")
 (setq make-backup-files nil)
 (setq create-lockfiles nil)
 
@@ -172,18 +167,14 @@ Interactive uses `nil` for the require-match argument so new files can be create
 (global-set-key (kbd "C-x C-f") #'my-find-file-in-new-tab)
 
 
-
-
-
-
-
-
 ;; -------------------------------
 ;; UTF-8 and Markdown
 ;; -------------------------------
 (prefer-coding-system 'utf-8)
 (setq coding-system-for-read 'utf-8)
 (setq coding-system-for-write 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+
 ;; Use pandoc for markdown conversion
 (setq markdown-command "pandoc -f gfm -t html5 --standalone")
 
@@ -205,9 +196,8 @@ Interactive uses `nil` for the require-match argument so new files can be create
 
 
 (setq company-minimum-prefix-length 2
-      company-idle-delay 0.1
+      company-idle-delay 0.05
       company-selection-wrap-around t)
-
 
 ;; -------------------------------
 ;; Suspend company popups during snippet fields (robust + efficient)
@@ -228,7 +218,8 @@ Interactive uses `nil` for the require-match argument so new files can be create
 ;; -------------------------------
 (defvar my-frequent-words
   '("Braun's JJ" "heterogeneously" "enhancing" "irregular" "SUVmax"
-    "thickness" "blood loss" "duration" "high colored urine" "clay colored stool" "chloramphenicol" "tigecycline" "doxycycline" "teicoplanin" "vancomycin" "colistin" "levofloxacin" "cholelithiasis" "choledocholithiasis" "optimization" "diagnostic workup" "gall bladder" "pancreas" "lymph nodes" "weight loss" "supportive care" "pigtail" "tolerating" "hepatocellular carcinoma" "resection" "idiopathic thrombocytopenic purpura" "mycophenolate mofetil" "hemihepatectomy" "extubated and shifted to" "Pfannenstiel" "adenocarcinoma" "generalised" "pruritus" "fluctuating" "nonreactive" "comorbidities")
+    "thickness" "blood loss" "duration" "high colored urine" "clay colored stool" "chloramphenicol" "tigecycline" "doxycycline" "teicoplanin" "vancomycin" "colistin" "levofloxacin" "meropenem" "gentamicin" "amikacin" "cholelithiasis" "choledocholithiasis" "optimization" "diagnostic workup" "gall bladder" "pancreas" "lymph nodes" "weight loss" "supportive care" "pigtail" "tolerating" "hepatocellular carcinoma" "resection" "idiopathic thrombocytopenic purpura" "mycophenolate mofetil" "hemihepatectomy" "extubated and shifted to" "Pfannenstiel" "adenocarcinoma" "generalised" "pruritus" "fluctuating" "nonreactive" "comorbidities" "asymmetrical" "circumferential" "thickening" "Frey's procedure" "serology" "triglyceride"
+    "discharged" "Acinetobacter" "enhancement" "progressive" "periampullary" "differentiated")
   "List of frequently used words for autocompletion.")
 
 (defun company-my-frequent-words (command &optional arg &rest ignored)
@@ -278,11 +269,11 @@ Interactive uses `nil` for the require-match argument so new files can be create
 
 ;; Configure company backends
 (setq company-backends
-      '((company-yasnippet
-         company-dabbrev
+      '((company-dabbrev
          company-my-frequent-words
          company-capf
-         company-files)))
+         company-files
+         company-yasnippet)))
 
 ;; Sort completions
 (setq company-transformers
@@ -299,8 +290,10 @@ Interactive uses `nil` for the require-match argument so new files can be create
 ;; -------------------------------
 
 (add-to-list 'load-path "C:/Users/suman/") ; directory containing markdown-snippets.el
-(require 'markdown-snippets)
-;; (require 'new-snippets) ; keep elisp files with new snippets here 
+
+(load "markdown-snippets" t)
+(load "new-snippets" t)
+(load "meld" t)
 
 
 ;; Configure dabbrev to collect words properly
@@ -345,8 +338,11 @@ Interactive uses `nil` for the require-match argument so new files can be create
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(anzu ess markdown-mode monokai-theme
-	  move-text color-theme-sanityinc-tomorrow quarto-mode smartparens solarized-theme yasnippet)))
+   '(anzu auctex color-theme-sanityinc-tomorrow ess ess-R-data-view
+	  ess-view highlight-indent-guides htmlize jupyter magit
+	  markdown-mode material-theme monokai-theme move-text
+	  multiple-cursors poly-R poly-org quarto-mode smartparens
+	  solarized-theme yaml yaml-mode yasnippet)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -376,11 +372,6 @@ Interactive uses `nil` for the require-match argument so new files can be create
 (global-set-key (kbd "C-x |") 'toggle-window-split)
 
 
-(require 'anzu)
-(global-anzu-mode +1)
-
-(move-text-default-bindings)
-
 ;; -------------------------------
 ;; Org-mode Babel Language Support
 ;; -------------------------------
@@ -402,27 +393,20 @@ Interactive uses `nil` for the require-match argument so new files can be create
 (setq org-export-babel-evaluate t)
 
 (require 'htmlize)
+(setq isearch-wrap-pause nil)  
+(setq isearch-allow-scroll t) 
 
-(use-package multiple-cursors
-  :ensure t
-  :demand t
-  :bind (("C-S-c C-S-c" . mc/edit-lines)
-         ("C-c >"       . mc/mark-next-like-this)
-         ("C-c <"       . mc/mark-previous-like-this)
-         ("C-c C->"     . mc/skip-to-next-like-this)
-         ("C-c C-<"     . mc/skip-to-previous-like-this)
-         ;; mouse
-         ("M-<mouse-1>" . mc/add-cursor-on-click))
-  :config
-  (global-unset-key (kbd "M-<down-mouse-1>")))
+(require 'anzu)
+(global-anzu-mode +1)
 
-
+(move-text-default-bindings)
 
 (put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
 
 
 ;; Get file name and one folder above with keyboard shortcut 
-;; C-c u 
+;; C-c f
 (defun copy-parent-folder-and-file ()
   "Copy 'parent-folder/filename' to clipboard."
   (interactive)
@@ -434,7 +418,7 @@ Interactive uses `nil` for the require-match argument so new files can be create
       (kill-new result)
       (message result))))
 
-(global-set-key (kbd "C-c u") 'copy-parent-folder-and-file)
+(global-set-key (kbd "C-c f") 'copy-parent-folder-and-file)
 
 ;; Refresh emacs file with init
 
@@ -444,7 +428,8 @@ Interactive uses `nil` for the require-match argument so new files can be create
   (load-file user-init-file)
   (message "Config reloaded!"))
 
-(global-set-key (kbd "C-c f") 'reload-init-file)
+(global-set-key (kbd "C-c r") 'reload-init-file)
+
 
 
 (add-hook 'markdown-mode-hook
@@ -456,3 +441,59 @@ Interactive uses `nil` for the require-match argument so new files can be create
           (lambda ()
             (setq-local yas-indent-line 'fixed)))
 
+
+
+;; Make C-a, C-e, backspace work 
+
+(defun my/beginning-of-line-smart ()
+  "Use move-beginning-of-line always (works with multiple-cursors)."
+  (interactive)
+  (move-beginning-of-line nil))
+
+(defun my/end-of-line-smart ()
+  "Use move-end-of-line always (works with multiple-cursors)."
+  (interactive)
+  (move-end-of-line nil))
+
+(defun my/backspace-smart ()
+  "Backspace that works reliably with multiple-cursors."
+  (interactive)
+  (backward-delete-char-untabify 1))
+
+(use-package markdown-mode
+  :config
+  (setq markdown-special-ctrl-a/e nil)
+  (define-key markdown-mode-map (kbd "C-a") 'my/beginning-of-line-smart)
+  (define-key markdown-mode-map (kbd "C-e") 'my/end-of-line-smart)
+  (define-key markdown-mode-map (kbd "<backspace>") 'my/backspace-smart))
+
+(use-package multiple-cursors
+  :ensure t
+  :demand t
+  :bind* (("C-S-c C-S-c" . mc/edit-lines)
+          ("C-;"          . mc/mark-next-like-this)
+          ("C-c <"        . mc/mark-previous-like-this)
+          ("C-c C->"      . mc/skip-to-next-like-this)
+          ("C-c C-<"      . mc/skip-to-previous-like-this)
+          ("C-c m a"      . mc/mark-all-like-this)
+          ("M-<mouse-1>"  . mc/add-cursor-on-click))
+  :config
+  (global-unset-key (kbd "M-<down-mouse-1>")))
+
+(with-eval-after-load 'multiple-cursors
+  (dolist (cmd '(backward-delete-char-untabify
+                 delete-backward-char
+                 delete-forward-char
+                 delete-char
+                 backward-kill-word
+                 kill-word
+                 move-beginning-of-line
+                 move-end-of-line
+                 my/beginning-of-line-smart
+                 my/end-of-line-smart        ;; <-- added
+                 my/backspace-smart
+                 markdown-outdent-or-delete
+                 markdown-electric-backspace
+                 markdown-beginning-of-line
+                 markdown-end-of-line))      ;; <-- added
+    (add-to-list 'mc/cmds-to-run-for-all cmd)))
