@@ -209,7 +209,7 @@ Interactive uses `nil` for the require-match argument so new files can be create
                        yas--active-field-overlay
                        (overlay-buffer yas--active-field-overlay))
                   nil
-                0.1)))
+                0.05)))
 
 (add-hook 'post-command-hook #'my/company-suspend-in-yas-field)
 
@@ -229,24 +229,8 @@ Interactive uses `nil` for the require-match argument so new files can be create
                  (company-grab-word)))
     (candidates
      (cl-remove-if-not (lambda (w) (string-prefix-p arg w)) my-frequent-words))
-    (annotation (lambda (w) " [freq]"))
+    (annotation (propertize " [freq]" 'face 'company-frequent-words))
     (ignore-case t)))
-
-;; Annotate frequent words in popup
-(defface company-frequent-words
-  '((t :foreground "#a3be8c" :weight bold))
-  "Face for frequent words in Company popup.")
-
-(defun company-my-frequent-words-annotate (candidate)
-  "Add annotation and face to frequent words."
-  (propertize " [freq]" 'face 'company-frequent-words))
-
-(advice-add 'company-my-frequent-words :around
-            (lambda (orig-fun &rest args)
-              (let ((res (apply orig-fun args)))
-                (if (eq (car args) 'annotation)
-                    (company-my-frequent-words-annotate res)
-                  res))))
 
 ;; Add/remove frequent words
 (defun add-current-word-to-frequent-words ()
