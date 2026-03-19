@@ -17,12 +17,11 @@
     ("intraot" "Intraop findings: ${1:OT details}, duration: $5, blood loss: $6 \n$0" "Operative details")
     ("drainwhip" "Rt SHD: $1, Lt PJ: $2 $0" "Amount of drain in case of SSPD")
     ("ugi" "Upper GI endoscopy: $1 $0" "upper GI endoscopy findings")
-    ("lai" "Name: $1, CT number: $2 \n Liver HU 1: $3 \n Spleen HU 1: $4 \n Liver HU 2: $5 \n Spleen HU 2: $6 \n Liver HU 3: $7 \n Spleen HU 3: $8 \n $0" "Liver LAI entry for thesis")
-    ("gen" "Generated with $1. $0" "Generated with which AI?")        
+    ("lai" "Name: $1, CT number: $2 \nLiver HU 1: $3 \nSpleen HU 1: $4 \nLiver HU 2: $5 \nSpleen HU 2: $6 \nLiver HU 3: $7 \nSpleen HU 3: $8 \n $0" "Liver LAI entry for thesis")
+    ("gen" "Generated with $1. $0" "Generated with which AI?")  
+    ("rcode"  "\\`\\`\\`{r}\n#| echo: ${1:true/false}\n#| message: ${2:true/false}\n\n$3\n\n\\`\\`\\` \n$0" "R code chunk in quarto")
+    ("pytho"  "\\`\\`\\`{python}\n#| echo: ${1:true/false}\n#| message: ${2:true/false}\n\n$3\n\n\\`\\`\\` \n$0" "Python code chunk in quarto")    
+    ("call" "::: {.callout-note}\n$1\n\n:::\n$0" "Call out note in quarto")      
   ))
 
 (provide 'new-snippets)
-
-
-
-
