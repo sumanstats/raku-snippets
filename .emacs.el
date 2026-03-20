@@ -32,7 +32,10 @@
 (global-display-line-numbers-mode t)
 (add-hook 'emacs-startup-hook 'toggle-frame-maximized)
 (set-frame-font "Fira Code-18" nil t)
-(load-theme 'material t)
+
+(require 'ef-themes)
+(load-theme 'monokai t)
+
 (setq inferior-R-program-name "D:/R-4.5.2/bin/R.exe")
 (setq make-backup-files nil)
 (setq create-lockfiles nil)
@@ -108,13 +111,20 @@ If BUFFER is nil, use `current-buffer'."
               (remhash (file-truename buffer-file-name) my/tab-buffer->tabname))))
 
 ;;;###autoload
+
 (defun my-find-file-in-new-tab (filename &optional wildcards)
   "Open FILENAME in a new tab to the right, or jump to the tab recorded for it.
 
 Fast path: if we have a recorded tab name for FILENAME, jump to that tab (no flicker).
 Fallback: scan tabs (temporarily selecting them) to find a tab that shows the buffer.
 Interactive uses `nil` for the require-match argument so new files can be created."
-  (interactive (find-file-read-args "Find file in new tab: " nil))
+(interactive
+ (let ((completing-read-function #'completing-read-default)
+       (read-file-name-function nil))
+   (ivy-mode -1)
+   (unwind-protect
+       (find-file-read-args "Find file in new tab: " nil)
+     (ivy-mode 1))))
   (cl-block nil
     (let* ((truename (and filename (file-truename filename)))
            (tabname  (and truename (gethash truename my/tab-buffer->tabname)))
@@ -322,11 +332,11 @@ Interactive uses `nil` for the require-match argument so new files can be create
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(auctex color-theme-sanityinc-tomorrow ess ess-R-data-view
-	  ess-view highlight-indent-guides htmlize ivy jupyter magit
-	  markdown-mode material-theme monokai-theme move-text
-	  multiple-cursors poly-R poly-org quarto-mode smartparens
-	  solarized-theme swiper yaml yaml-mode yasnippet)))
+   '(auctex color-theme-sanityinc-tomorrow ef-themes ess ess-R-data-view
+	    ess-view highlight-indent-guides htmlize ivy jupyter magit
+	    markdown-mode material-theme monokai-theme move-text
+	    multiple-cursors poly-R poly-org quarto-mode smartparens
+	    solarized-theme swiper yaml yaml-mode yasnippet)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -364,6 +374,9 @@ Interactive uses `nil` for the require-match argument so new files can be create
 ;; The 't' means "enable" for that language.
 
 (setq org-babel-python-command "D:/miniconda3/python.exe")
+
+
+
 (org-babel-do-load-languages
  'org-babel-load-languages
  '(
@@ -371,6 +384,8 @@ Interactive uses `nil` for the require-match argument so new files can be create
    (R . t)     
    (emacs-lisp . t)
    ))
+
+
 (setq org-html-inline-images t)
 (add-hook 'org-mode-hook 'org-display-inline-images)
 (setq org-confirm-babel-evaluate nil)
@@ -402,7 +417,7 @@ Interactive uses `nil` for the require-match argument so new files can be create
 ;; Refresh emacs file with init
 
 (defun reload-init-file ()
-  "Reload Emacs init file."
+  "Reload Emacs init file."  
   (interactive)
   (load-file user-init-file)
   (message "Config reloaded!"))
@@ -420,17 +435,6 @@ Interactive uses `nil` for the require-match argument so new files can be create
           (lambda ()
             (setq-local yas-indent-line 'fixed)))
 
-;; Use swiper
-
-(use-package ivy
-  :ensure t
-  :config
-  (ivy-mode 1)
-  (setq ivy-wrap t))
-
-(use-package swiper
-  :ensure t
-  :bind (("C-s" . swiper-isearch)))
 
 ;; Make C-a, C-e, backspace work 
 
@@ -486,3 +490,33 @@ Interactive uses `nil` for the require-match argument so new files can be create
                  markdown-beginning-of-line
                  markdown-end-of-line))      ;; <-- added
     (add-to-list 'mc/cmds-to-run-for-all cmd)))
+
+
+
+
+
+
+
+;; Use swiper
+
+
+(use-package ivy
+  :ensure t
+  :config
+  (ivy-mode 1)
+  (setq ivy-wrap t)
+  (setq ivy-use-selectable-prompt nil)
+
+  (defun my/ivy-tab-only-partial ()
+    (interactive)
+    (ivy-partial))
+
+  (define-key ivy-minibuffer-map (kbd "TAB") #'my/ivy-tab-only-partial)
+  (define-key ivy-minibuffer-map (kbd "<tab>") #'my/ivy-tab-only-partial)
+  (define-key ivy-minibuffer-map (kbd "S-TAB") #'ivy-previous-line)
+  (define-key ivy-minibuffer-map (kbd "C-j") #'ivy-done)
+  )
+
+(use-package swiper
+  :ensure t
+  :bind (("C-s" . swiper-isearch)))
