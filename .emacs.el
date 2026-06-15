@@ -1,12 +1,23 @@
+(setq gc-cons-threshold (* 50 1000 1000))   ; high during init
+(add-hook 'after-init-hook
+          (lambda () (setq gc-cons-threshold 800000))) ; restore
+
 ;; Disable unnecessary GUI elements
 (tool-bar-mode -1)
+(horizontal-scroll-bar-mode 1)
 (tab-bar-mode 1)
 (global-visual-line-mode 1)
+(menu-bar-mode -1)
 ;; 1)
 (setq inhibit-startup-screen t)
+(setq initial-scratch-message nil)
+
+;; dired to always sort numbers naturally
+(setq dired-listing-switches "-alv")
 
 ;; 2)
 (delete-selection-mode t)
+(which-function-mode 1)
 
 ;; 3)
 (show-paren-mode 1)
@@ -19,11 +30,10 @@
 ;; -------------------------------
 ;; Package setup
 ;; -------------------------------
-(require 'package)
-;; Add only MELPA stable
+;; Add MELPA
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/") t)
-(package-initialize)
+;; For Emacs 27+, package is initialized by default
 
 ;; -------------------------------
 ;; Basic settings
@@ -31,12 +41,12 @@
 (setq default-directory "C:/Users/suman/Desktop/Audit/")
 (global-display-line-numbers-mode t)
 (add-hook 'emacs-startup-hook 'toggle-frame-maximized)
-(set-frame-font "Fira Code-18" nil t)
+(when (member "Fira Code" (font-family-list))
+  (set-frame-font "Fira Code-18" nil t))
 
-(require 'ef-themes)
 (load-theme 'monokai t)
 
-(setq inferior-R-program-name "D:/R-4.5.2/bin/R.exe")
+(setq inferior-R-program-name "D:/R-4.6.0/bin/R.exe")
 (setq make-backup-files nil)
 (setq create-lockfiles nil)
 
@@ -195,7 +205,6 @@ Interactive uses `nil` for the require-match argument so new files can be create
 
 (require 'company)
 (require 'yasnippet)
-(require 'cl-lib)
 
 ;; -------------------------------
 ;; Enable modes
@@ -283,10 +292,11 @@ Interactive uses `nil` for the require-match argument so new files can be create
 ;; Markdown snippets
 ;; -------------------------------
 
-(add-to-list 'load-path "C:/Users/suman/") ; directory containing markdown-snippets.el
+(add-to-list 'load-path "C:/Users/suman/myemacs") ; directory containing markdown-snippets.el
 
 (load "markdown-snippets" t)
 (load "new-snippets" t)
+(load "distal_panc" t)
 (load "meld" t)
 
 
@@ -326,45 +336,6 @@ Interactive uses `nil` for the require-match argument so new files can be create
 
 
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(auctex color-theme-sanityinc-tomorrow ef-themes ess ess-R-data-view
-	    ess-view highlight-indent-guides htmlize ivy jupyter magit
-	    markdown-mode material-theme monokai-theme move-text
-	    multiple-cursors poly-R poly-org quarto-mode smartparens
-	    solarized-theme swiper yaml yaml-mode yasnippet)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-
-
-(defun toggle-window-split ()
-  "Toggle between horizontal and vertical split for two windows."
-  (interactive)
-  (when (= (count-windows) 2)
-    (let* ((w1 (selected-window))
-           (w2 (next-window))
-           (b1 (window-buffer w1))
-           (b2 (window-buffer w2))
-           (edges1 (window-edges w1))
-           (edges2 (window-edges w2))
-           (split-vertically-p (< (cadr edges1) (cadr edges2))))
-      (delete-other-windows)
-      (if split-vertically-p
-          (split-window-right)
-        (split-window-below))
-      (set-window-buffer (selected-window) b1)
-      (set-window-buffer (next-window) b2))))
-
-(global-set-key (kbd "C-x |") 'toggle-window-split)
-
 
 ;; -------------------------------
 ;; Org-mode Babel Language Support
@@ -400,7 +371,6 @@ Interactive uses `nil` for the require-match argument so new files can be create
 
 
 ;; Get file name and one folder above with keyboard shortcut 
-;; C-c f
 (defun copy-parent-folder-and-file ()
   "Copy 'parent-folder/filename' to clipboard."
   (interactive)
@@ -412,7 +382,19 @@ Interactive uses `nil` for the require-match argument so new files can be create
       (kill-new result)
       (message result))))
 
-(global-set-key (kbd "C-c f") 'copy-parent-folder-and-file)
+(global-set-key (kbd "C-c M-f") 'copy-parent-folder-and-file)
+
+(defun copy-filename-only ()
+  "Copy current buffer's filename (without path) to clipboard."
+  (interactive)
+  (when buffer-file-name
+    (let ((filename (file-name-nondirectory buffer-file-name)))
+      (kill-new filename)
+      (message filename))))
+
+(global-set-key (kbd "C-c f") 'copy-filename-only)
+
+
 
 ;; Refresh emacs file with init
 
@@ -429,6 +411,8 @@ Interactive uses `nil` for the require-match argument so new files can be create
 (add-hook 'markdown-mode-hook
           (lambda ()
             (setq-local yas-indent-line 'fixed)))
+
+
 
 ;; If you use quarto-mode specifically:
 (add-hook 'quarto-mode-hook
@@ -520,3 +504,29 @@ Interactive uses `nil` for the require-match argument so new files can be create
 (use-package swiper
   :ensure t
   :bind (("C-s" . swiper-isearch)))
+
+
+;;======================================
+
+;; need to manually install .ttf files for all-the-icons from https://github.com/domtronn/all-the-icons.el
+(add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+
+
+;;#####################################################
+;; rainbow delimiters
+(use-package rainbow-delimiters
+  :ensure t)
+
+(with-eval-after-load 'rainbow-delimiters
+  (let ((okabe-ito '("#E69F00" "#56B4E9" "#009E73" "#F0E442"
+                     "#0072B2" "#D55E00" "#CC79A7" "#999999")))
+    (dotimes (i (length okabe-ito))
+      (let ((face (intern (format "rainbow-delimiters-depth-%d-face"
+                                  (1+ i)))))
+        (when (facep face)
+          (set-face-attribute
+           face nil
+           :foreground (elt okabe-ito i)))))))
+
+(add-hook 'markdown-mode-hook #'rainbow-delimiters-mode)
+(add-hook 'quarto-mode-hook #'rainbow-delimiters-mode)
