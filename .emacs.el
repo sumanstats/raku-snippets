@@ -9,6 +9,12 @@
 (global-visual-line-mode 1)
 (menu-bar-mode -1)
 ;; 1)
+
+;; Set default line endings to Unix (LF)
+(prefer-coding-system 'utf-8)
+(setq-default buffer-file-coding-system 'utf-8-unix)
+;; also change in git bash shell 
+
 (setq inhibit-startup-screen t)
 (setq initial-scratch-message nil)
 
@@ -298,6 +304,8 @@ Interactive uses `nil` for the require-match argument so new files can be create
 (load "new-snippets" t)
 (load "distal_panc" t)
 (load "meld" t)
+(load "mch" t)
+
 
 
 ;; Configure dabbrev to collect words properly
