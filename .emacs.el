@@ -1,3 +1,6 @@
+;;; -*- lexical-binding: t; -*-
+
+
 (setq gc-cons-threshold (* 50 1000 1000))   ; high during init
 (add-hook 'after-init-hook
           (lambda () (setq gc-cons-threshold 800000))) ; restore
@@ -36,23 +39,28 @@
 ;; -------------------------------
 ;; Package setup
 ;; -------------------------------
-;; Add MELPA
-(add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/") t)
-;; For Emacs 27+, package is initialized by default
+(require 'package)   ; ← load package.el
+
+;; Add repositories (keep GNU ELPA too, or just MELPA)
+(setq package-archives
+      '(("gnu"   . "https://elpa.gnu.org/packages/")
+        ("melpa" . "https://melpa.org/packages/")))
+
+;; Initialize the package system
+(package-initialize)
 
 ;; -------------------------------
 ;; Basic settings
 ;; -------------------------------
-(setq default-directory "C:/Users/suman/Desktop/Audit/")
+(setq default-directory "C:/Users/skhanal/")
 (global-display-line-numbers-mode t)
 (add-hook 'emacs-startup-hook 'toggle-frame-maximized)
-(when (member "Fira Code" (font-family-list))
-  (set-frame-font "Fira Code-18" nil t))
+(when (member "Consolas" (font-family-list))
+  (set-frame-font "Consolas-18" nil t))
 
 (load-theme 'monokai t)
 
-(setq inferior-R-program-name "D:/R-4.6.0/bin/R.exe")
+(setq inferior-R-program-name "D:/R-4.6.1/bin/R.exe")
 (setq make-backup-files nil)
 (setq create-lockfiles nil)
 
@@ -298,7 +306,7 @@ Interactive uses `nil` for the require-match argument so new files can be create
 ;; Markdown snippets
 ;; -------------------------------
 
-(add-to-list 'load-path "C:/Users/suman/myemacs") ; directory containing markdown-snippets.el
+(add-to-list 'load-path "C:/Users/skhanal/myemacs") ; directory containing markdown-snippets.el
 
 (load "markdown-snippets" t)
 (load "new-snippets" t)
@@ -538,3 +546,18 @@ Interactive uses `nil` for the require-match argument so new files can be create
 
 (add-hook 'markdown-mode-hook #'rainbow-delimiters-mode)
 (add-hook 'quarto-mode-hook #'rainbow-delimiters-mode)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(all-the-icons-dired company ess htmlize monokai-theme move-text
+			 multiple-cursors quarto-mode
+			 rainbow-delimiters swiper yasnippet)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
