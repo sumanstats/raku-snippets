@@ -309,7 +309,7 @@ Interactive uses `nil` for the require-match argument so new files can be create
 (add-to-list 'load-path "C:/Users/skhanal/myemacs") ; directory containing markdown-snippets.el
 
 (load "markdown-snippets" t)
-(load "new-snippets" t)
+(load "quarto" t)
 (load "distal_panc" t)
 (load "meld" t)
 (load "mch" t)
