@@ -134,6 +134,8 @@ If BUFFER is nil, use `current-buffer'."
             (when buffer-file-name
               (remhash (file-truename buffer-file-name) my/tab-buffer->tabname))))
 
+
+
 ;;;###autoload
 
 (defun my-find-file-in-new-tab (filename &optional wildcards)
@@ -225,7 +227,7 @@ Interactive uses `nil` for the require-match argument so new files can be create
 ;; -------------------------------
 (yas-global-mode 1)
 (global-company-mode 1)
-(yas-reload-all)
+
 
 
 (setq company-minimum-prefix-length 2
@@ -249,11 +251,39 @@ Interactive uses `nil` for the require-match argument so new files can be create
 ;; -------------------------------
 ;; Company backends
 ;; -------------------------------
-(defvar my-frequent-words
-  '("Braun's JJ" "heterogeneously" "enhancing" "irregular" "SUVmax"
-    "thickness" "blood loss" "duration" "high colored urine" "clay colored stool" "chloramphenicol" "tigecycline" "doxycycline" "teicoplanin" "vancomycin" "colistin" "levofloxacin" "meropenem" "gentamicin" "amikacin" "cholelithiasis" "choledocholithiasis" "optimization" "diagnostic workup" "gall bladder" "pancreas" "lymph nodes" "weight loss" "supportive care" "pigtail" "tolerating" "hepatocellular carcinoma" "resection" "idiopathic thrombocytopenic purpura" "mycophenolate mofetil" "hemihepatectomy" "extubated and shifted to" "Pfannenstiel" "adenocarcinoma" "generalised" "pruritus" "fluctuating" "nonreactive" "comorbidities" "asymmetrical" "circumferential" "thickening" "Frey's procedure" "serology" "triglyceride"
-    "discharged" "Acinetobacter" "enhancement" "progressive" "periampullary" "differentiated")
+
+;; Define the variable
+(defvar my-frequent-words nil
   "List of frequently used words for autocompletion.")
+
+;; Define the directory where your .txt files live
+(defvar my-frequent-words-dir "C:/Users/skhanal/myemacs/frequent_words/")
+
+(defun my/load-frequent-words-from-dir ()
+  "Load words from all .txt files in `my-frequent-words-dir`."
+  (interactive)
+  (let ((words '()))
+    (when (file-exists-p my-frequent-words-dir)
+      ;; Loop through all .txt files in the directory
+      (dolist (file (directory-files my-frequent-words-dir t "\\.txt\\'"))
+        (with-temp-buffer
+          (insert-file-contents file)
+          ;; Read the file line by line
+          (goto-char (point-min))
+          (while (not (eobp))
+            (let ((line (buffer-substring-no-properties
+                         (line-beginning-position)
+                         (line-end-position))))
+              ;; Add non-empty lines to the list
+              (unless (string-empty-p (string-trim line))
+                (push (string-trim line) words)))
+            (forward-line 1)))))
+    ;; Set the variable and remove duplicates
+    (setq my-frequent-words (delete-dups (nreverse words)))))
+
+;; Load the words when Emacs starts
+(my/load-frequent-words-from-dir)
+
 
 (defun company-my-frequent-words (command &optional arg &rest ignored)
   "Company backend for frequent words. Trigger after 3 characters."
@@ -525,7 +555,14 @@ Interactive uses `nil` for the require-match argument so new files can be create
 ;;======================================
 
 ;; need to manually install .ttf files for all-the-icons from https://github.com/domtronn/all-the-icons.el
-(add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+;;(add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+
+(use-package all-the-icons-dired
+  :hook (dired-mode . all-the-icons-dired-mode)
+  :config
+  ;; Optional: set to nil to get full-color icons instead of monochrome
+  (setq all-the-icons-dired-monochrome nil))
+
 
 
 ;;#####################################################
