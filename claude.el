@@ -268,14 +268,28 @@ If BUFFER is nil, use `current-buffer'."
 ;; =====================================================================
 ;; R / Python (cross-platform: search PATH instead of hardcoding a drive)
 ;; =====================================================================
+
+(defvar my/r-program-path "D:/R-4.6.1/bin/R.exe"
+  "Explicit path to the R executable, e.g. \"D:/R-4.6.1/bin/R.exe\".
+Leave nil to auto-detect via PATH.")
+
+(defvar my/python-program-path nil
+  "Explicit path to the python executable.
+Leave nil to auto-detect via PATH.")
+
+
 (use-package ess
   :defer t
   :init
   (setq inferior-R-program-name
-        (or (my/find-program "R" "R.exe") "R")))
+      (or my/r-program-path
+          (my/find-program "R" "R.exe")
+          "R")))
 
 (setq org-babel-python-command
-      (or (my/find-program "python3" "python" "python.exe") "python3"))
+      (or my/python-program-path
+          (my/find-program "python3" "python" "python.exe")
+          "python3"))
 
 ;; =====================================================================
 ;; Markdown / pandoc
